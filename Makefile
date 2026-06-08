@@ -1,6 +1,5 @@
-LOGIN = noemi
 PATH_YML = -f ./srcs/docker-compose.yml
-PATH_DATA = /home/$(LOGIN)/data
+# PATH_DATA = /home/login/data
 DC = docker compose $(PATH_YML)
 
 all: up
@@ -26,14 +25,11 @@ log:
 	$(DC) logs frontend
 
 fclean: cdown
-	docker volume rm -f inception_db_data inception_wordpress_data
+	docker volume rm -f srcs_FE_app
 	docker system prune -a --volumes -f
 
-sclean: fclean
-	sudo -k rm -rf $(PATH_DATA)/*
-	sudo mkdir -p $(PATH_DATA) $(PATH_DATA)/wordpress $(PATH_DATA)/mariadb
+# sclean: fclean
+#	sudo -k rm -rf $(PATH_DATA)/*
+#	sudo mkdir -p $(PATH_DATA)
 
-first: sclean re
-	echo "check .env"
-
-.PHONY: all up down cup cdown build re log fclean vclean
+.PHONY: all up down cup cdown build re log fclean
