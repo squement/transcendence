@@ -13,6 +13,22 @@ services:
     volumes:
       - FE_app:/app
       - /app/node_modules
+  backend:
+    restart: always
+    build:
+      context: ./requirements/backend
+      dockerfile: Dockerfile
+      # dev / prod
+      target: dev
+    networks:
+      - net
+    expose:
+      - "3000"
+    # ports:
+    #  - "3000:3000"
+    volumes:
+      - BE_app:/app
+      - /app/node_modules
 
 volumes:
   FE_app:
@@ -21,6 +37,12 @@ volumes:
       type: none
       o: bind
       device: ./requirements/frontend
+  BE_app:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./requirements/backend
 
 networks:
   net:
