@@ -5,7 +5,11 @@ import testImg from './assets/testing.png'
 
 function Click() {
   const [count, setCount] = useState(0)
-
+	useEffect(() => {
+	fetch('/backend/greet/from backend')
+		.then(res => res.text())
+		.then(data => console.log(data))
+	}, [])
   return (
     <div>
       <h1>Count: {count}</h1>

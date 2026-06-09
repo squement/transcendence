@@ -1,20 +1,42 @@
 services:
+  frontend:
+    restart: always
+    build:
+      context: ./requirements/frontend
+      dockerfile: Dockerfile
+      # dev requires 5173:5173 / prod requires 80:80
+      target: dev
+    networks:
+      - net
+    ports:
+      - "5173:5173"
+    volumes:
+      - FE_app:/app
+      - /app/node_modules
   backend:
     restart: always
     build:
       context: ./requirements/backend
       dockerfile: Dockerfile
       # dev / prod
-      target: prod
+      target: dev
     networks:
       - net
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
+    # ports:
+    #  - "3000:3000"
     volumes:
       - BE_app:/app
       - /app/node_modules
 
 volumes:
+  FE_app:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./requirements/frontend
   BE_app:
     driver: local
     driver_opts:

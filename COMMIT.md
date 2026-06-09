@@ -1,14 +1,15 @@
 ### Commit extension for more description after each commit
 
-9.6.26 16h48
+9.6.26 17h16
 Includes:
 A basic testing area for the backend 'srcs/requirements/frontend/src'
 A working dockerfile with 2 versions (dev and prod)
 dev: should allow quick changes to react files
 prod: the better version to submit, lightweight and protected
 A dockercompose that requires a target change to use either dockerfile mods
+A connection between front and back was established using 'fetch(/backend/greet/from backend)'
 Next Step:
-- fuse the docker-compose and allow an interaction between front and back
+- start using configfiles
 
 8.6.26 18h34
 Includes:
