@@ -1,5 +1,7 @@
 services:
   frontend:
+    depends_on:
+      - backend
     restart: always
     build:
       context: ./requirements/frontend
