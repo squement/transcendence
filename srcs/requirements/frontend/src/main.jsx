@@ -9,10 +9,10 @@ import Message from './Message.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-	<Click />
+	{/* <Click />
 	<DrawBoard />
 	<Draw />
-    <App />
+    <App /> */}
 	<Game />
 	<Message />
   </StrictMode>,
