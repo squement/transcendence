@@ -46,20 +46,20 @@ function Game() {
 				requestAnimationFrame(gameLoop);
 				return; // ← INDISPENSABLE pour stopper les collisions pendant le gif
 			}
-			if (keys.current["w"] && (leftPaddle.current.y - PADDLESPEED) > 0) {leftPaddle.current.y -= PADDLESPEED; if ((ball.current.x <= 35 && ball.current.x > 0) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy -= 0.5;}
-			if (keys.current["s"] && (leftPaddle.current.y + PADDLESPEED) < 500) {leftPaddle.current.y += PADDLESPEED; if ((ball.current.x <= 35 && ball.current.x > 0) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy += 0.5;}
-			if (keys.current["ArrowUp"] && (rightPaddle.current.y - PADDLESPEED) > 0) {rightPaddle.current.y -= PADDLESPEED; if ((ball.current.x >= 765 && ball.current.x < 800) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy -= 0.5;}
-			if (keys.current["ArrowDown"] && (rightPaddle.current.y + PADDLESPEED) < 500) {rightPaddle.current.y += PADDLESPEED; if ((ball.current.x >= 765 && ball.current.x < 800) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy += 0.5;}
+			if (keys.current["w"] && (leftPaddle.current.y - PADDLESPEED) > 0 - PADDLESPEED) {leftPaddle.current.y -= PADDLESPEED; if ((ball.current.x <= 35 && ball.current.x > 0) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy -= 0.5;}
+			if (keys.current["s"] && (leftPaddle.current.y + PADDLESPEED) < 500 + PADDLESPEED) {leftPaddle.current.y += PADDLESPEED; if ((ball.current.x <= 35 && ball.current.x > 0) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy += 0.5;}
+			if (keys.current["ArrowUp"] && (rightPaddle.current.y - PADDLESPEED) > 0 - PADDLESPEED) {rightPaddle.current.y -= PADDLESPEED; if ((ball.current.x >= 765 && ball.current.x < 800) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy -= 0.5;}
+			if (keys.current["ArrowDown"] && (rightPaddle.current.y + PADDLESPEED) < 500 + PADDLESPEED) {rightPaddle.current.y += PADDLESPEED; if ((ball.current.x >= 765 && ball.current.x < 800) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) ball.current.vy += 0.5;}
 			
 			//Annoying ass collisions test left
 			if (ball.current.vy > 0 && (ball.current.x <= 35 && ball.current.x > 15) && ((ball.current.y > leftPaddle.current.y) && (ball.current.y < (leftPaddle.current.y + Math.abs(ball.current.vy))))) {ball.current.y = leftPaddle.current.y; ball.current.vy = -ball.current.vy;}
-			if (ball.current.vy < 0 && (ball.current.x <= 35 && ball.current.x > 15) && ((ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT)) && (ball.current.y > (leftPaddle.current.y + PADDLE_HEIGHT + 10)))) {ball.current.y = (leftPaddle.current.y + PADDLE_HEIGHT); ball.current.vy = -ball.current.vy;}
+			if (ball.current.vy < 0 && (ball.current.x <= 35 && ball.current.x > 15) && ((ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT)) && (ball.current.y > (leftPaddle.current.y + PADDLE_HEIGHT - 10)))) {ball.current.y = (leftPaddle.current.y + PADDLE_HEIGHT); ball.current.vy = -ball.current.vy;}
 			// Annoying ass collisions test right
 			if (ball.current.vy > 0 && (ball.current.x >= 765 && ball.current.x < 785) && ((ball.current.y > rightPaddle.current.y) && (ball.current.y < (rightPaddle.current.y + Math.abs(ball.current.vy))))) {ball.current.y = rightPaddle.current.y; ball.current.vy = -ball.current.vy;}
-			if (ball.current.vy < 0 && (ball.current.x >= 765 && ball.current.x < 785) && ((ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT)) && (ball.current.y > (rightPaddle.current.y + PADDLE_HEIGHT + 10)))) {ball.current.y = (rightPaddle.current.y + PADDLE_HEIGHT); ball.current.vy = -ball.current.vy;}
+			if (ball.current.vy < 0 && (ball.current.x >= 765 && ball.current.x < 785) && ((ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT)) && (ball.current.y > (rightPaddle.current.y + PADDLE_HEIGHT - 10)))) {ball.current.y = (rightPaddle.current.y + PADDLE_HEIGHT); ball.current.vy = -ball.current.vy;}
 
-			if ((ball.current.x <= 35 && ball.current.x >= 35 - (Math.abs(ball.current.vx) * ball.current.speed)) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) {ball.current.x = 35; ball.current.vx = -ball.current.vx; if (ball.current.speed < MAXBALLSPEED) {ball.current.speed += 0.05;} ball.current.vy += (Math.random() > 0.5 ? Math.random() / 3 : -(Math.random() / 3)); ball.current.vx}
-			if ((ball.current.x >= 765 && ball.current.x >= 765 +  (Math.abs(ball.current.vx) * ball.current.speed)) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) {ball.current.x = 765; ball.current.vx = -ball.current.vx; if (ball.current.speed < MAXBALLSPEED) {ball.current.speed += 0.05;} ball.current.vy += (Math.random() > 0.5 ? Math.random() / 3 : -(Math.random() / 3)); ball.current.vx}
+			if ((ball.current.x <= 35 && ball.current.x >= 35 - (Math.abs(ball.current.vx) * ball.current.speed)) && (ball.current.y > leftPaddle.current.y && ball.current.y < (leftPaddle.current.y + PADDLE_HEIGHT))) {ball.current.x = 35; ball.current.vx = -ball.current.vx; if (ball.current.speed < MAXBALLSPEED) {ball.current.speed += 0.05;} ball.current.vy += (Math.random() > 0.5 ? Math.random() / 3 : -(Math.random() / 3));}
+			if ((ball.current.x >= 765 && ball.current.x <= 765 +  (Math.abs(ball.current.vx) * ball.current.speed)) && (ball.current.y > rightPaddle.current.y && ball.current.y < (rightPaddle.current.y + PADDLE_HEIGHT))) {ball.current.x = 765; ball.current.vx = -ball.current.vx; if (ball.current.speed < MAXBALLSPEED) {ball.current.speed += 0.05;} ball.current.vy += (Math.random() > 0.5 ? Math.random() / 3 : -(Math.random() / 3));}
 			if (ball.current.y <= 0) {ball.current.y = 0; ball.current.vy = -ball.current.vy;}
 			if (ball.current.y >= 600) {ball.current.y = 600; ball.current.vy = -ball.current.vy;}
 
@@ -123,25 +123,27 @@ function Game() {
 
 	return  (
 		<>
-		{/* <p>y: Left = {debugLY} Right = {debugRY} BallY = {debugBY} BallX = {debugBX} BallVY = {debugBVY} BallVX = {debugBVX}</p> */}
-		<p>Speed = {debugSpeed} Rand : {rand}</p>
-		{/* <canvas ref={canvasRef} width={800} height={600} /> */}
-		<div style={{ position: "relative", width: "800px", height: "600px" }}>
-            <canvas ref={canvasRef} width={800} height={600} style={{ display: "block" }}/>
-            {showGif && (
-                <img
-                    src="/sumire-yoshizawa-sumire.gif"
-                    style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: 800,
-                        height: 600,
-						display: "block"
-                    }}
-                />
-            )}
-        </div>
+		<p>y: Left = {debugLY} Right = {debugRY} BallY = {debugBY} BallX = {debugBX} BallVY = {debugBVY} BallVX = {debugBVX}</p>
+		{/* <p>Speed = {debugSpeed} Rand : {rand}</p> */}
+		<canvas ref={canvasRef} width={800} height={600} />
+		{/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", height: "100vh" }}>
+			<div style={{ position: "relative", width: "800px", height: "600px" }}>
+				<canvas ref={canvasRef} width={800} height={600} style={{ display: "block" }}/>
+				{showGif && (
+					<img
+						src="/sumire-yoshizawa-sumire.gif"
+						style={{
+							position: "absolute",
+							top: 0,
+							left: 0,
+							width: 800,
+							height: 600,
+							display: "block"
+						}}
+					/>
+				)}
+			</div>
+		</div> */}
 
 		</>
 	)
