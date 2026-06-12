@@ -19,7 +19,7 @@ cdown:
 build: cdown
 	@$(DC) build --no-cache
 
-re: build up
+re: fclean build up
 
 log:
 	$(DC) logs frontend
