@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
-import './App.css'
-import Message from './Message'
-import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED } from './config.js'
+import '../App.css'
+import Message from '../Message.jsx'
+import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED } from './game_config.js'
 import { update } from "./game_update.js"
 import { render } from "./game_render.js"
 

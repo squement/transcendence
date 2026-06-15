@@ -1,4 +1,4 @@
-import { PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, CANVAS_HEIGHT, CANVAS_WIDTH, SCORE_HEIGHT, BALL_SIZE, BALL_IDK } from './config.js'
+import { PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, CANVAS_HEIGHT, CANVAS_WIDTH, SCORE_HEIGHT, BALL_SIZE, BALL_IDK } from './game_config.js'
 
 export function render(ctx, ball, leftPaddle, rightPaddle, score) {
 	ctx.fillStyle = "black";
