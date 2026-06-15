@@ -1,5 +1,31 @@
 ### Commit extension for more description after each commit
 
+13.6.26 21h11
+Includes:
+An almost fully working Pong with scores, collisions, accelerating ball, slightly randomized trajectory when the ball is bouncing on the paddles and the beginning of a win condition and the Game() function is easier to edit/use now
+A basic testing area for the backend 'srcs/requirements/frontend/src'
+A working dockerfile with 2 versions (dev and prod)
+dev: should allow quick changes to react files
+prod: the better version to submit, lightweight and protected
+A dockercompose that requires a target change to use either dockerfile mods
+A connection between front and back was established using 'fetch(/backend/greet/from backend)'
+Next Step:
+- start using configfiles
+- allow a Pong game to end
+
+11.6.26 18h01
+Includes:
+An almost fully working Pong with scores, collisions, accelerating ball, slightly randomized trajectory when the ball is bouncing on the paddles and the beginning of a win condition
+A basic testing area for the backend 'srcs/requirements/frontend/src'
+A working dockerfile with 2 versions (dev and prod)
+dev: should allow quick changes to react files
+prod: the better version to submit, lightweight and protected
+A dockercompose that requires a target change to use either dockerfile mods
+A connection between front and back was established using 'fetch(/backend/greet/from backend)'
+Next Step:
+- start using configfiles
+- optimize Game.jsx to make it easier to connect to the backend
+
 9.6.26 17h16
 Includes:
 A basic testing area for the backend 'srcs/requirements/frontend/src'
