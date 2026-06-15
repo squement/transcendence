@@ -1,5 +1,12 @@
 ### Commit extension for more description after each commit
 
+15.6.26 11h51
+Includes:
+'backend/src/user' which allows the usage of a Array[User] using fetch(/backend/user)
+returns the class instance as a json
+Next Step:
+- Allow POST methods and variable modifications
+
 9.6.26 17h16
 Includes:
 A basic testing area for the backend 'srcs/requirements/frontend/src'

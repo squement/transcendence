@@ -3,13 +3,67 @@ import { useRef, useEffect } from "react"// Draw()
 import heroImg from './assets/hero.png'
 import testImg from './assets/testing.png'
 
+function Fetcher() {
+  const [url, setUrl] = useState('');
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const doFetch = async () => {
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    try {
+      const res = await fetch(url);
+      // Try JSON first, fall back to plain text
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        setResult(await res.json());
+      } else {
+        setResult(await res.text());
+      }
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={url}
+        onChange={e => setUrl(e.target.value)}
+        placeholder="Enter a URL, e.g. /backend/my_config"
+        style={{ width: '400px' }}
+      />
+      <button onClick={doFetch} disabled={!url || loading}>
+        {loading ? 'Fetching...' : 'Fetch'}
+      </button>
+
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+      {result !== null && (
+        <pre>{typeof result === 'object' ? JSON.stringify(result, null, 2) : result}</pre>
+      )}
+    </div>
+  );
+}
+
 function Click() {
   const [count, setCount] = useState(0)
 	useEffect(() => {
-	fetch('/backend/greet/from backend')
-		.then(res => res.text())
-		.then(data => console.log(data))
-	}, [])
+	const load = async () => {
+		const res = await fetch('/backend/my_config');
+		const config = await res.json();
+		console.log(config.id, config.idn);
+
+		const greeting = await fetch('/backend/greet/from backend');
+		console.log(await greeting.text());
+	};
+	load();
+	}, []);
   return (
     <div>
       <h1>Count: {count}</h1>
@@ -169,5 +223,5 @@ function Draw() {
   )
 }
 
-export { Click, Draw }
+export { Click, Draw, Fetcher }
 export default DrawBoard
