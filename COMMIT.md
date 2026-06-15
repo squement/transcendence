@@ -1,5 +1,13 @@
 ### Commit extension for more description after each commit
 
+15.6.26 21h58
+# Base Profile display & Avatar
+Includes:
+A very basic react function that fetches (for now) user/0, displays it json format and fetches testing.png
+Next Step:
+- Add string avatar to user
+- work on a simple format
+
 13.6.26 21h11
 Includes:
 An almost fully working Pong with scores, collisions, accelerating ball, slightly randomized trajectory when the ball is bouncing on the paddles and the beginning of a win condition and the Game() function is easier to edit/use now

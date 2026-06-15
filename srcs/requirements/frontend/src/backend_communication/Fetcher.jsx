@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { postJson } from './Post'
-import { getAny } from './Get'
+import getAny from './Get'
 
 function Fetcher() {
   const [url, setUrl] = useState('');

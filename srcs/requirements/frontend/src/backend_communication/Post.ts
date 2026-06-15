@@ -17,6 +17,8 @@ export const postJson = async (myClass: string, body: object) => {
 	// await is necessary after this
 };
 
-export const postAny = async (myClass:string, body: any) => {
+const postAny = async (myClass:string, body: any) => {
 	return await postJson(myClass, body);
 };
+
+export default postAny

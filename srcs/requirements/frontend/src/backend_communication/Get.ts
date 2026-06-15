@@ -1,5 +1,5 @@
 // Give target class '/user' and body, if body is an array url will get /arr
-export const getAny = async (myClass: string) => {
+const getAny = async (myClass: string) => {
 	let url = '/backend' + myClass;
   	const res = await fetch(url);
   	if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -8,3 +8,5 @@ export const getAny = async (myClass: string) => {
 	return await res.text();
 	// await is necessary after this
 };
+
+export default getAny
