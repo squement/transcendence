@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import DrawBoard from './click_App.jsx'
 import { Click, Draw } from './click_App.jsx'
-import Fetcher from './be_test/Fetcher.jsx'
+import Fetcher from './backend_communication/Fetcher.jsx'
 import Game from './Game.jsx'
 import Message from './Message.jsx'
 

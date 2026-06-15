@@ -1,12 +1,13 @@
 ### Commit extension for more description after each commit
 
-15.6.26 17h38
+15.6.26 19h04
 Includes:
 'backend/src/user' which allows the usage of a Array[User] using fetch(/backend/user)
 returns the class instance as a json
-variables can be get and updated (post)
+variables can be get and updated (post) using postAny / postJson or getAny
 Next Step:
-- quick post
+- installation and link to real database
+- Fix react image overlap
 
 9.6.26 17h16
 Includes:
@@ -17,7 +18,7 @@ prod: the better version to submit, lightweight and protected
 A dockercompose that requires a target change to use either dockerfile mods
 A connection between front and back was established using 'fetch(/backend/greet/from backend)'
 Next Step:
-- start using configfiles
+V 15.6.26 19h04 - start using ~~configfiles~~ classes and json
 
 8.6.26 18h34
 Includes:

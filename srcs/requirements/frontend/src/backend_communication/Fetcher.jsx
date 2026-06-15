@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { postJson } from './Post'
+import { getAny } from './Get'
 
 function Fetcher() {
   const [url, setUrl] = useState('');
@@ -12,16 +14,10 @@ function Fetcher() {
 	setError(null);
 	setResult(null);
 	try {
-	  const res = await fetch(url);
-	  // Try JSON first, fall back to plain text
-	  const contentType = res.headers.get('content-type');
-	  if (contentType && contentType.includes('application/json')) {
-		setResult(await res.json());
-	  } else {
-		setResult(await res.text());
-	  }
+		setResult(await getAny(url));
 	} catch (e) {
 	  setError(e.message);
+	  setResult(null);
 	} finally {
 	  setLoading(false);
 	}
@@ -32,23 +28,14 @@ function Fetcher() {
 	setError(null);
 	setResult(null);
 	try {
-	let upUrl = '/backend/user/update/one';
-	let bodyJson = result;
-	if (Array.isArray(result)) {
-		upUrl = '/backend/user/update'
-		bodyJson = result.map(user => ({ ...user, update: user.update + 1 }));
-	}
-	else bodyJson = { ...result, update: result.update + 1 };
-	const res = await fetch(upUrl, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(bodyJson),
-	});
-	if (!res.ok) throw new Error(`HTTP ${res.status}`);
-	setResult(await res.json());
-	//setPostBody(result);
+		if (!result || result.statusCode) throw new Error('No valid data to update');
+		let bodyJson = result;
+		if (Array.isArray(result)) bodyJson = result.map(user => ({ ...user, update: user.update + 1 }));
+		else bodyJson = { ...result, update: result.update + 1 };
+		setResult(await postJson('/user', bodyJson));
 	} catch (e) {
 		setError(e.message);
+		setResult(null);
 	} finally {
 		setLoading(false);
 	}
@@ -60,7 +47,7 @@ function Fetcher() {
 		type="text"
 		value={url}
 		onChange={e => setUrl(e.target.value)}
-		placeholder="Enter a URL, e.g. /backend/user"
+		placeholder="Enter a URL, e.g. /user"
 		style={{ width: '400px' }}
 	  />
 	  <button onClick={doFetch} disabled={!url || loading}>
