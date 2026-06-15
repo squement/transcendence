@@ -1,5 +1,5 @@
 function Message() {
-	return <h>Haiiiiiii hihi</h>
+	return <h3>Haiiiiiii hihi</h3>
 }
 
 export default Message

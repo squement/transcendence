@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import DrawBoard from './click_App.jsx'
 import { Click, Draw } from './click_App.jsx'
+import Fetcher from './backend_communication/Fetcher.jsx'
 import Game from './game/Game.jsx'
 import Message from './Message.jsx'
 
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')).render(
 	<Draw />
     <App /> */}
 	<Game />
+	<Fetcher />
 	<Message />
   </StrictMode>,
 )

@@ -6,10 +6,16 @@ import testImg from './assets/testing.png'
 function Click() {
   const [count, setCount] = useState(0)
 	useEffect(() => {
-	fetch('/backend/greet/from backend')
-		.then(res => res.text())
-		.then(data => console.log(data))
-	}, [])
+	const load = async () => {
+		const res = await fetch('/backend/my_config');
+		const config = await res.json();
+		console.log(config.id, config.idn);
+
+		const greeting = await fetch('/backend/greet/from backend');
+		console.log(await greeting.text());
+	};
+	load();
+	}, []);
   return (
     <div>
       <h1>Count: {count}</h1>
