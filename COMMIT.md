@@ -1,5 +1,13 @@
 ### Commit extension for more description after each commit
 
+16.6.26 19h53
+# Base Websocket
+Includes:
+Working websocket system that currently send and display a message every 2 seconds
+Next Step:
+- Display user profiles through it
+- Explore friendlist and status options
+
 15.6.26 21h58
 # Base Profile display & Avatar
 Includes:

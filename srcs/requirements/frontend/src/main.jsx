@@ -8,6 +8,7 @@ import Fetcher from './backend_communication/Fetcher.jsx'
 import Profile from './user/user_profile.jsx'
 import Game from './game/Game.jsx'
 import Message from './Message.jsx'
+import Broadcast from './backend_communication/Socketer'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
 	<DrawBoard />
 	<Draw />
     <App /> */}
+	<Broadcast />
 	<Game />
 	<Fetcher />
 	<Profile />
