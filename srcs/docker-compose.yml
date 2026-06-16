@@ -6,7 +6,6 @@ services:
     build:
       context: ./requirements/frontend
       dockerfile: Dockerfile
-      # dev requires 5173:5173 / prod requires 80:80
       target: dev
     networks:
       - net
@@ -15,22 +14,57 @@ services:
     volumes:
       - FE_app:/app
       - /app/node_modules
+
   backend:
     restart: always
     build:
       context: ./requirements/backend
       dockerfile: Dockerfile
-      # dev / prod
       target: dev
     networks:
       - net
-    expose:
-      - "3000"
-    # ports:
-    #  - "3000:3000"
+    ports:
+      - "3000:3000"
     volumes:
       - BE_app:/app
       - /app/node_modules
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    networks:
+      - net
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - DB_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:  # optionnal but useful to debug
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      - net
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@transcendence.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
 
 volumes:
   FE_app:
@@ -45,6 +79,8 @@ volumes:
       type: none
       o: bind
       device: ./requirements/backend
+  DB_data:  # volume persistant pour les données
+    driver: local
 
 networks:
   net:
