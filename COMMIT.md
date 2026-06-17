@@ -1,12 +1,13 @@
 ### Commit extension for more description after each commit
 
-16.6.26 19h53
+17.6.26 14h45
 # Base Websocket
 Includes:
-Working websocket system that currently send and display a message every 2 seconds
+Working websocket system that currently send and display a message every 2 seconds.
+A test list shows online users in real time (handles connect and disconnect automatically).
 Next Step:
-- Display user profiles through it
-- Explore friendlist and status options
+- Display user profiles through websockets
+- Improve friendlist and status usage
 
 15.6.26 21h58
 # Base Profile display & Avatar
