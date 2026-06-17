@@ -4,7 +4,7 @@
 # Frontend Routing
 Includes:
 A complete routing system using React Router (react-router-dom v7) via a dedicated 'router.jsx' file
-All app pages created as separate files (one file = one feature) : Home, Login, Register, GamePage, Profile, Tournament, Friends, Settings, NotFound (404)
+All app pages created as separate files (one file = one feature) : Home, Login, Register, GamePage, Profile, Tournament, Friends, Settings, NotFound (404), FetcherPage
 Login and Register pages include placeholder forms (email + password / username + email + password) ready to be connected to the auth backend
 A minimal shared stylesheet 'styles/pages.css' for basic page layout
 main.jsx simplified to only render the Router
