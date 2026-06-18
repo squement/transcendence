@@ -12,3 +12,4 @@ export const BALL_SIZE = 10;
 export const BALL_IDK = 0;
 export const SCORE_TO_WIN = 10;
 export const SCORE_HEIGHT = 50;
+export const GAME_MOD = "solo";
