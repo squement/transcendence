@@ -5,8 +5,11 @@
 Includes:
 Working websocket system that currently send and display a message every 2 seconds.
 A test list shows online users in real time (handles connect and disconnect automatically).
+The user list is a class defined in the backend.
+A room classes system was added (non functional yet)
 Next Step:
 - Display user profiles through websockets
+- Join rooms with cookie defined id users
 - Improve friendlist and status usage
 
 15.6.26 21h58

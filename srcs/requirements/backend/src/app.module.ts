@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { EventsGateway } from './services/events.gateway';
+import { SocketModule } from './services/socket.module';
 
 @Module({
-  imports: [EventsGateway, UserModule],
+  imports: [UserModule, SocketModule],
   controllers: [AppController],
   providers: [AppService],
 })

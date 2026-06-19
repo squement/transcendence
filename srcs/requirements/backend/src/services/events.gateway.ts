@@ -1,5 +1,7 @@
 import { WebSocketGateway, WebSocketServer, OnGatewayInit, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import RoomService from './room.service';
+import { UserService } from '../user/user.service';
 
 @WebSocketGateway({ cors: { 
 	origin: 'http://localhost:5173'
@@ -9,7 +11,9 @@ import { Server } from 'socket.io';
 export class EventsGateway implements OnGatewayInit, OnGatewayDisconnect {
   @WebSocketServer()
   server!: Server;
+  constructor(private userService: UserService) {}
   private users: string[] = [];
+  //constructor(public roomService: RoomService) {}
 
   	handleConnection(client: any) {
 		console.log('CLIENT CONNECTED', client.id);
@@ -43,7 +47,8 @@ export class EventsGateway implements OnGatewayInit, OnGatewayDisconnect {
 			this.server.emit('list', {
 				type: 'online',
 				payload: {
-					array: this.users
+					array: this.userService.findAll()
+					//array: this.users
 				}
 			});
 		}, 2000);

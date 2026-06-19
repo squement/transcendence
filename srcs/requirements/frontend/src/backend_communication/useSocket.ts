@@ -3,7 +3,8 @@ import { io } from 'socket.io-client';
 
 export function useSocket() {
   const [messages, setMessages] = useState<string[]>([]);
-  const [users, setUsers] = useState<string[]>([]);
+  const [annoncement, setAnnoncement] = useState<string[]>([]);
+  const [users, setUsers] = useState([]);
 
 	useEffect(() => {
 		const socket = io('/', {
@@ -23,8 +24,14 @@ export function useSocket() {
 				break;
 
 				case 'notification':
-				console.log(msg.payload.title);
-				//setUsers(prev => [...prev, msg.payload.text]);
+					switch (msg.payload.title) {
+						case 'test':
+							setAnnoncement([msg.payload.text]);
+						break ;
+						default:
+							console.log(msg.payload.title);
+						break ;
+					}
 				break;
 			}
 		});
@@ -39,5 +46,5 @@ export function useSocket() {
 			socket.disconnect();
 		};
 		}, []);
-  return [messages, users];
+  return [messages, users, annoncement];
 }
