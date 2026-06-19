@@ -1,8 +1,10 @@
 import { useSocket } from './useSocket';
 import { io } from 'socket.io-client';
+import { useUpData } from '../game/game_socket';
 
 export default function Broadcast() {
   const [messages, users, annoncement] = useSocket();
+  useUpData();
 
   function Emit() {
 	const socket = io('/', {

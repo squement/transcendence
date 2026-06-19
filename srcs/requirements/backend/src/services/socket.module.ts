@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { NotificationsGateway } from './notifications.gateway';
 import { EventsGateway } from './events.gateway';
+import { GameGateway } from './game.gateway';
 import { UserModule } from '../user/user.module';
 
 @Module({
@@ -8,6 +9,7 @@ import { UserModule } from '../user/user.module';
 	],
 	providers: [
 		EventsGateway,
+		GameGateway,
 		NotificationsGateway
 	],
 })

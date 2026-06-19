@@ -5,6 +5,7 @@ import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED } from './game_c
 import { update } from "./game_update"
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext';
+import { useUpData } from './game_socket.js';
 
 function Game() {
 	const canvasRef = useRef(null);

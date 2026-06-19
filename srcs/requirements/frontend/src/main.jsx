@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')).render(
 	  <DrawBoard />
 	  <Draw />
       <App /> */}
-	  <AppRouter /> 
+	  <AppRouter />
 	  {/* <Broadcast />
 	  <Game />
 	  <Fetcher />
