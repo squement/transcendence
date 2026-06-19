@@ -1,5 +1,12 @@
 ### Commit extension for more description after each commit
 
+19.6.26 18h38
+# Pong added to the backend
+Includes:
+Working Pong with a new game_update.ts file that is in the backend folder so we can use it to play online later.
+Next step:
+- Connect back and front end Pong
+
 17.6.26 14h45
 # Base Websocket
 Includes:
