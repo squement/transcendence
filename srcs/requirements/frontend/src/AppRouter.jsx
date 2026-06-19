@@ -1,6 +1,7 @@
+import { useAuth } from './AuthContext';
+import LoginPage from './LoginPage';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { AuthProvider } from './AuthContext.jsx'
 import './index.css'
 import App from './App.jsx'
 import DrawBoard from './click_App.jsx'
@@ -10,21 +11,20 @@ import Profile from './user/user_profile.jsx'
 import Game from './game/Game.jsx'
 import Message from './Message.jsx'
 import Broadcast from './backend_communication/Socketer'
-import AppRouter from './AppRouter.jsx'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-	<AuthProvider>
-	  {/* <Click />
-	  <DrawBoard />
-	  <Draw />
-      <App /> */}
-	  <AppRouter /> 
-	  {/* <Broadcast />
-	  <Game />
-	  <Fetcher />
-	  <Profile />
-	  <Message /> */}
-	</AuthProvider>
-  </StrictMode>,
-)
+export default function AppRouter() {
+  const { user, loading } = useAuth();
+
+  if (loading) return <p>Chargement...</p>;
+  if (!user) return <LoginPage />;
+
+  return (
+    <>
+      <Broadcast />
+      <Game />
+      <Fetcher />
+      <Profile />
+      <Message />
+    </>
+  );
+}
