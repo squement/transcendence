@@ -4,6 +4,7 @@ import Message from '../Message.jsx'
 import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED } from './game_config.js'
 import { update } from "./game_update.js"
 import { render } from "./game_render.js"
+import { useAuth } from '../AuthContext';
 
 function Game() {
 	const canvasRef = useRef(null);
@@ -22,6 +23,7 @@ function Game() {
 	const [rand, setRand] = useState(Math.random());
 	const gameOver = useRef(false);
 	const score = useRef({ leftPlayer: 0, rightPlayer: 0 });
+	const { user } = useAuth();
 
 	useEffect(() => {
 		const handleKeyDown = (e) => { keys.current[e.key] = true; };
@@ -46,7 +48,7 @@ function Game() {
 				return; 
 			}
 			update(ball, leftPaddle, rightPaddle, gameOver, score, setShowGif, keys);
-			render(ctx, ball, leftPaddle, rightPaddle, score);
+			render(ctx, ball, leftPaddle, rightPaddle, score, user.username);
 
 			setDebugLY(leftPaddle.current.y);
 			setDebugRY(rightPaddle.current.y);

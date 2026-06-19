@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react"
 import Get from '/src/backend_communication/Get'
 import Post from '/src/backend_communication/Post'
+import { useAuth } from '../AuthContext';
 
 function displayProfile() {
 	const [result,	setResult]	= useState(null);
 	const [error,	setError]	= useState(null);
 	const [loading,	setLoading]	= useState(false);
 	const [name,	setName]	= useState('Unknown');
+	const { user } = useAuth();
 
 	useEffect(() => {
 	setLoading(true);
@@ -29,7 +31,7 @@ function displayProfile() {
 	}, []);
   return (
 	<div>
-		<h1>Profile: {name}</h1>
+		<h1>Profile: {user.username}</h1>
 		<img src={`/backend/user/img`} alt="avatar" 
 		style={{ 
 			border: "1px solid black",
