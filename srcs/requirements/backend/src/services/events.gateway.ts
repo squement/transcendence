@@ -31,7 +31,7 @@ export class EventsGateway implements OnGatewayInit, OnGatewayDisconnect {
 		this.server.emit('message', {
 			type: 'notification',
 			payload: {
-				title: `New User disconnected: ${client.id}`,
+				title: `User disconnected: ${client.id}`,
 				text: `${client.id}`
 		}});
 	}

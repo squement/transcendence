@@ -1,10 +1,26 @@
 import { useSocket } from './useSocket';
+import { io } from 'socket.io-client';
 
 export default function Broadcast() {
   const [messages, users, annoncement] = useSocket();
 
+  function Emit() {
+	const socket = io('/', {
+		path: '/backend/socket.io',
+	});
+	console.log('emitting');
+	socket.emit('message', {
+		type: 'notification',
+		payload: {
+			title: `User responded`,
+			text: `Hi from User`
+	}});
+  }
   return (
     <div>
+		<button onClick={Emit}>
+		emit
+	  </button>
       <h2>Messages from server</h2>
 	  <p>
         {annoncement.map((msg, i) => <li key={i}>{msg}</li>)}

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ChatGateway } from './chat.gateway';
 import { NotificationsGateway } from './notifications.gateway';
 import { EventsGateway } from './events.gateway';
 import { UserModule } from '../user/user.module';
@@ -9,7 +8,6 @@ import { UserModule } from '../user/user.module';
 	],
 	providers: [
 		EventsGateway,
-		ChatGateway,
 		NotificationsGateway
 	],
 })

@@ -1,4 +1,4 @@
-import { WebSocketGateway, SubscribeMessage } from '@nestjs/websockets';
+import { WebSocketGateway, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
 
 // notifications.gateway.ts
 @WebSocketGateway({ cors: { 
@@ -11,7 +11,10 @@ export class NotificationsGateway {
   console.log('NotificationsGateway created');
 }
   	@SubscribeMessage('message')
- 	 handleNotification() {
-		console.log('Received notification from front');
-	 }
+ 	handleMessage(
+	@MessageBody() data: any,
+	@ConnectedSocket() client: any,
+	) {
+	console.log('Received in \'notifications gateway\' from', client.id, ':', data.payload.text);
+	}
 }

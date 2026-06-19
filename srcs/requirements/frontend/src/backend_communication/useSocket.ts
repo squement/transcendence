@@ -30,6 +30,12 @@ export function useSocket() {
 						break ;
 						default:
 							console.log(msg.payload.title);
+							socket.emit('message', {
+								type: 'notification',
+								payload: {
+									title: `User responded`,
+									text: `Hi from User`
+							}});
 						break ;
 					}
 				break;

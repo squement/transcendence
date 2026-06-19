@@ -3,7 +3,7 @@
 17.6.26 14h45
 # Base Websocket
 Includes:
-Working websocket system that currently send and display a message every 2 seconds.
+Working websocket system that currently send/responds and display a message every 2 seconds.
 A test list shows online users in real time (handles connect and disconnect automatically).
 The user list is a class defined in the backend.
 A room classes system was added (non functional yet)
