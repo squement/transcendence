@@ -1,34 +1,7 @@
 import { PADDLE_SPEED, PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, MAX_BALL_SPEED, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_ACCELERATION, SCORE_TO_WIN, BALL_SHIFTING, BALL_SPEED } from './game_config'
+import { Ball, Paddle, GameState, Score, Keys } from './game_types';
 
-interface Ball {
-	x: number;
-	y: number;
-	vx: number;
-	vy: number;
-	speed: number;
-}
-
-interface Paddle {
-	y: number;
-}
-
-interface Score {
-	leftPlayer: number;
-	rightPlayer: number;
-}
-
-interface Keys {
-	w: boolean;
-	s: boolean;
-	up: boolean;
-	down: boolean;
-}
-
-interface GameState {
-	gameOver: boolean;
-}
-
-export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, gameState: GameState, score: Score, keys: Keys) {
+export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, gameState: GameState, score: Score, keys: Keys, deltaTime: number) {
 
 	if (ball.x <= 0 || ball.x >= CANVAS_WIDTH) {
 		gameState.gameOver = true;
@@ -41,18 +14,23 @@ export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, game
 			ball.speed = BALL_SPEED;
 			ball.x = CANVAS_WIDTH / 2;
 			ball.y = CANVAS_HEIGHT / 2;
-			ball.vx = (Math.random() > 0.5 ? 3 : -3) * ball.speed;
-			ball.vy = (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1) * ball.speed;
+			ball.vx = (Math.random() > 0.5 ? 3 : -3);
+			ball.vy = (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1);
 			leftPaddle.y = (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2);
 			rightPaddle.y = (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2);
 			gameState.gameOver = false;
 		}, 2000);
 	}
 
-	if ((keys.w) && (leftPaddle.y - PADDLE_SPEED) > 0 - PADDLE_SPEED) {leftPaddle.y -= PADDLE_SPEED; if ((ball.x <= (PADDLE_WIDTH + PADDLE_SPACING) && ball.x > 0) && (ball.y > leftPaddle.y && ball.y < (leftPaddle.y + PADDLE_HEIGHT))) ball.vy -= BALL_SHIFTING;}
-	if ((keys.s) && (leftPaddle.y + PADDLE_SPEED) < (CANVAS_HEIGHT - PADDLE_HEIGHT) + PADDLE_SPEED) {leftPaddle.y += PADDLE_SPEED; if ((ball.x <= (PADDLE_WIDTH + PADDLE_SPACING) && ball.x > 0) && (ball.y > leftPaddle.y && ball.y < (leftPaddle.y + PADDLE_HEIGHT))) ball.vy += BALL_SHIFTING;}
-	if (keys.up && (rightPaddle.y - PADDLE_SPEED) > 0 - PADDLE_SPEED) {rightPaddle.y -= PADDLE_SPEED; if ((ball.x >= (CANVAS_WIDTH - (PADDLE_WIDTH + PADDLE_SPACING)) && ball.x < CANVAS_WIDTH) && (ball.y > rightPaddle.y && ball.y < (rightPaddle.y + PADDLE_HEIGHT))) ball.vy -= BALL_SHIFTING;}
-	if (keys.down && (rightPaddle.y + PADDLE_SPEED) < (CANVAS_HEIGHT - PADDLE_HEIGHT) + PADDLE_SPEED) {rightPaddle.y += PADDLE_SPEED; if ((ball.x >= (CANVAS_WIDTH - (PADDLE_WIDTH + PADDLE_SPACING)) && ball.x < CANVAS_WIDTH) && (ball.y > rightPaddle.y && ball.y < (rightPaddle.y + PADDLE_HEIGHT))) ball.vy += BALL_SHIFTING;}
+if (keys.w && leftPaddle.y - PADDLE_SPEED * deltaTime > -PADDLE_SPEED * deltaTime)
+        leftPaddle.y -= PADDLE_SPEED * deltaTime;
+    if (keys.s && leftPaddle.y + PADDLE_SPEED * deltaTime < CANVAS_HEIGHT - PADDLE_HEIGHT + PADDLE_SPEED * deltaTime)
+        leftPaddle.y += PADDLE_SPEED * deltaTime;
+    if (keys.up && rightPaddle.y - PADDLE_SPEED * deltaTime > -PADDLE_SPEED * deltaTime)
+        rightPaddle.y -= PADDLE_SPEED * deltaTime;
+    if (keys.down && rightPaddle.y + PADDLE_SPEED * deltaTime < CANVAS_HEIGHT - PADDLE_HEIGHT + PADDLE_SPEED * deltaTime)
+        rightPaddle.y += PADDLE_SPEED * deltaTime;
+
 	
 	//Annoying ass collisions test left
 	if (ball.vy > 0 && (ball.x <= (PADDLE_WIDTH + PADDLE_SPACING) && ball.x > PADDLE_SPACING) && ((ball.y > leftPaddle.y) && (ball.y < (leftPaddle.y + Math.abs(ball.vy))))) {ball.y = leftPaddle.y; ball.vy = -ball.vy;}
@@ -67,7 +45,7 @@ export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, game
 	if (ball.y >= CANVAS_HEIGHT) {ball.y = CANVAS_HEIGHT; ball.vy = -ball.vy;}
 
 
-	ball.y += ball.vy * ball.speed;
-	ball.x += ball.vx * ball.speed;
+	ball.y += ball.vy * ball.speed * deltaTime + 1 - 1;
+	ball.x += ball.vx * ball.speed * deltaTime;
 	return;
 }

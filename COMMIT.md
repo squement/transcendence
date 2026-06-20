@@ -1,5 +1,13 @@
 ### Commit extension for more description after each commit
 
+20.6.26 21h57
+# Pong connected to the backend
+Inclues:
+Working Pong now fully connected to the backend, and communication between frontend and backend is set !!
+Also, the game speed doesnt depend on the framerate anymore, now it will be running at the same speed for everyone, even if the framerate drops for one of the two players.
+Next step:
+- Merge with the main
+
 19.6.26 18h38
 # Pong added to the backend
 Includes:
