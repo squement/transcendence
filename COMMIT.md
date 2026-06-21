@@ -1,13 +1,5 @@
 ### Commit extension for more description after each commit
 
-20.6.26 21h57
-# Pong connected to the backend
-Inclues:
-Working Pong now fully connected to the backend, and communication between frontend and backend is set !!
-Also, the game speed doesnt depend on the framerate anymore, now it will be running at the same speed for everyone, even if the framerate drops for one of the two players.
-Next step:
-- Merge with the main
-
 21.6.26 12h09
 # Rooms Prelude
 Includes:
@@ -19,12 +11,21 @@ Next step:
 - Connect to a game instance
 - Basic chat
 
+
+20.6.26 21h57
+# Pong connected to the backend
+Inclues:
+Working Pong now fully connected to the backend, and communication between frontend and backend is set !!
+Also, the game speed doesnt depend on the framerate anymore, now it will be running at the same speed for everyone, even if the framerate drops for one of the two players.
+Next step:
+V 21.6.26 12h09 - Merge with the main
+
 19.6.26 18h38
 # Pong added to the backend
 Includes:
 Working Pong with a new game_update.ts file that is in the backend folder so we can use it to play online later.
 Next step:
-- Connect back and front end Pong
+V 20.6.26 21h57 - Connect back and front end Pong
 
 17.6.26 14h45
 # Base Websocket
@@ -45,7 +46,7 @@ Includes:
 A very basic react function that fetches (for now) user/0, displays it json format and fetches testing.png
 Next Step:
 - Add string avatar to user
-- work on a simple format
+V 15.6.26 21h58 - work on a simple format
 
 13.6.26 21h11
 Includes:
@@ -57,7 +58,7 @@ prod: the better version to submit, lightweight and protected
 A dockercompose that requires a target change to use either dockerfile mods
 A connection between front and back was established using 'fetch(/backend/greet/from backend)'
 Next Step:
-- start using configfiles
+X Denied - start using configfiles
 - allow a Pong game to end
 
 11.6.26 18h01
@@ -70,8 +71,8 @@ prod: the better version to submit, lightweight and protected
 A dockercompose that requires a target change to use either dockerfile mods
 A connection between front and back was established using 'fetch(/backend/greet/from backend)'
 Next Step:
-- start using configfiles
-- optimize Game.jsx to make it easier to connect to the backend
+X Denied - start using configfiles
+V 19.6.26 18h38 - optimize Game.jsx to make it easier to connect to the backend
 
 15.6.26 19h04
 # Front & Back communication
