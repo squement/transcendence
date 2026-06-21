@@ -6,8 +6,8 @@ import { Response } from 'express';
 export class AuthService {
 	constructor(private jwtService: JwtService) {}
 
-	login(username: string, res: Response) {
-		const payload = { username };
+	login(id: string, res: Response) {
+		const payload = { id };
 		const token = this.jwtService.sign(payload);
 
 		res.cookie('token', token, {
@@ -16,7 +16,7 @@ export class AuthService {
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 
-		return { message: "Logged in !!!!", username };
+		return { message: "Logged in !!!!", id };
 	}
 
 	logout(res: Response) {

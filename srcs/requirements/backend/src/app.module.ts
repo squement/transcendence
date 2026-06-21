@@ -3,12 +3,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
+import { GroupModule } from './group/group.module';
 import { EventsGateway } from './services/events.gateway';
 import { AuthModule } from './auth/auth.module';
 import { SocketModule } from './services/socket.module';
 
 @Module({
   imports: [
+	GroupModule,
 	UserModule,
 	SocketModule,
 	JwtModule.register({

@@ -1,5 +1,5 @@
 import { useAuth } from './AuthContext';
-import LoginPage from './LoginPage';
+import LoginPage, { LogoutButton } from './LoginPage';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -20,11 +20,12 @@ export default function AppRouter() {
 
   return (
     <>
-      <Broadcast />
-      <Game />
-      <Fetcher />
-      <Profile />
-      <Message />
+		<LogoutButton />
+		<Broadcast />
+		<Game />
+		<Fetcher />
+		<Profile />
+		<Message />
     </>
   );
 }
