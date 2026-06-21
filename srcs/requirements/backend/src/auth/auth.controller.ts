@@ -9,16 +9,16 @@ export class AuthController {
 
 	@Post('login')
 	login(
-		@Body('username') username: string,
+		@Body('id') id: string,
 		@Res({ passthrough: true }) res: Response,
 	) {
-		return this.authService.login(username, res);
+		return this.authService.login(id, res);
 	}
 
 	@Post('logout')
 	@UseGuards(AuthGuard)
 	logout(@Res({ passthrough: true}) res: Response) {
-		return this.logout(res);
+		return this.authService.logout(res);
 	}
 
 	@Get('me')

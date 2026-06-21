@@ -21,21 +21,13 @@ export class UserController {
 	res.setHeader('Content-Type', 'image/png');
 	res.sendFile(filePath);
 	}
-	/*@Get([':id/avatar', '/find/:id/avatar'])
-	getAvatar(@Param('id') id: string, @Res() res: Response) {
-	const filePath = '/tools/testing.png';
-	//const filePath = path.join(__dirname, '../../uploads', `${id}.png`);
-	if (!fs.existsSync(filePath)) throw new NotFoundException('Image not found');
-	res.setHeader('Content-Type', 'image/png');
-	res.sendFile(filePath);
-	}*/
 	@Get('/add/:name')
 	add(@Param('name') name: string): User {
 		return this.userService.add(name);
 	}
 	@Get(['/rm/:id', '/remove/:id'])
 	RemoveOne(@Param('id') id: string): string {
-	const found = this.userService.remove(Number(id));
+	const found = this.userService.remove(id);
 	if (!found) throw new NotFoundException(`User ${id} couldn't be removed`);
 	return 'User ' + id + ' was removed';
 	}
@@ -47,7 +39,7 @@ export class UserController {
 	}
 	@Get([':id', '/find/:id'])
 	findOne(@Param('id') id: string): User {
-	const user = this.userService.findOne(Number(id));
+	const user = this.userService.findOne(id);
 	if (!user) throw new NotFoundException(`User ${id} not found`);
 	return user;
 	}

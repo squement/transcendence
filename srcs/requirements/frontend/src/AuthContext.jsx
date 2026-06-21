@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { apiFetch } from "./api";
+import getAny from './backend_communication/Get'
 
 const AuthContext = createContext(null);
 
@@ -15,12 +16,24 @@ export function AuthProvider({ children }) {
 	}, []);
 
 	const login = async (username) => {
+		try {
+		const res = await getAny(`/user/add/${ username }`);
+		console.log('getAny result:', res);
 		await apiFetch('/auth/login', {
 			method: 'POST',
-			body: JSON.stringify({ username }),
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				id: res.id,
+			}),
+			// body: JSON.stringify({ username }),
 		});
 		const profile = await apiFetch('/auth/me');
 		setUser(profile);
+		} catch (e) {
+			console.log('login error:', e.message);
+		}
 	};
 
 	const logout = async () => {

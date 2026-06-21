@@ -17,7 +17,7 @@ function displayProfile() {
 	setName('Unknown');
 	const load = async () => {
 		try {
-			const data = await Get('/user/find/0');// default for now
+			const data = await Get(`/user/find/${ user.id }`);// default for now
 			setResult(data);
 			setName(data.username);
 		} catch (e) {
@@ -31,7 +31,7 @@ function displayProfile() {
 	}, []);
   return (
 	<div>
-		<h1>Profile: {user.username}</h1>
+		<h1>Profile: {name}</h1>
 		<img src={`/backend/user/img`} alt="avatar" 
 		style={{ 
 			border: "1px solid black",
@@ -43,6 +43,9 @@ function displayProfile() {
 		}}
 		/>
 	  {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+	  {result !== null && (
+		<pre>{typeof result === 'object' ? JSON.stringify(result, null, 2) : result}</pre>
+	  )}
 	</div>
   )
 }

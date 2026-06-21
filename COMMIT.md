@@ -1,5 +1,16 @@
 ### Commit extension for more description after each commit
 
+21.6.26 12h09
+# Rooms Prelude
+Includes:
+Well understood and easy to use gateways
+A Group class that can associate and isolate logged users via id
+Next step:
+- Construct Room class
+- Simplify Group usage
+- Connect to a game instance
+- Basic chat
+
 19.6.26 18h38
 # Pong added to the backend
 Includes:
