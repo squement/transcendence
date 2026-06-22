@@ -1,6 +1,6 @@
 import { PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, CANVAS_HEIGHT, CANVAS_WIDTH, SCORE_HEIGHT, BALL_SIZE, BALL_IDK } from './game_config.js'
 
-export function render(ctx, ball, leftPaddle, rightPaddle, score) {
+export function render(ctx, ball, leftPaddle, rightPaddle, score, username) {
 	ctx.fillStyle = "black";
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
@@ -16,4 +16,5 @@ export function render(ctx, ball, leftPaddle, rightPaddle, score) {
 	ctx.fillStyle = "white";
 	ctx.fillText(score.current.leftPlayer, (CANVAS_WIDTH / 4), SCORE_HEIGHT);
 	ctx.fillText(score.current.rightPlayer, (CANVAS_WIDTH / 2 * 1.5), SCORE_HEIGHT);
+	ctx.fillText(username, CANVAS_WIDTH / 2, ((CANVAS_HEIGHT / 2) * 1.25));
 }

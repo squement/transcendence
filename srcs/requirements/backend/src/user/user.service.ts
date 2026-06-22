@@ -7,11 +7,11 @@ export class UserService {
   private users: User[] = [];// "vector"
 
   add(username: string): User {
-    const user = new User(this.users.length, username, 0);
+    const user = new User(crypto.randomUUID(), username, 0);
     this.users.push(user);
     return user;
   }
-  remove(id: number): boolean {
+  remove(id: any): boolean {
 	const before = this.users.length;
 	this.users = this.users.filter(u => u.id !== id);
 	return this.users.length < before;// false if id didn't exist
@@ -31,7 +31,7 @@ export class UserService {
     return this.users;
   }
 
-  findOne(id: number): User | undefined {
+  findOne(id: any): User | undefined {
     return this.users.find(u => u.id === id);
   }
 }

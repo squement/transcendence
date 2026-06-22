@@ -1,23 +1,25 @@
-import { Controller, Get, Post, Body, Param, NotFoundException } from '@nestjs/common';
+import type { Response } from 'express';
+import { Controller, Res, Get, Post, Body, Param, NotFoundException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.model';
+import fs from 'fs';
+import path from 'path';
 
 @Controller('user')
 export class UserController {
 	constructor(public userService: UserService) {}
 	
 	// GET
-	@Get(['/', '/find', '/find/all'])
-	findAll(): User[] {
-	const user = this.userService.findAll();
-	if (!user) throw new NotFoundException(`Users couldn't be found`);
-	return user;
+	@Get('/img')
+	getAvatarDefault(@Res() res: Response) {
+	const filePath = path.resolve(process.cwd(), './tools/testing.png');
+	console.log(filePath);
+	if (!fs.existsSync(filePath)) {
+		res.status(404).json({ message: 'Image not found' });
+		return;
 	}
-	@Get([':id', '/find/:id'])
-	findOne(@Param('id') id: string): User {
-	const user = this.userService.findOne(Number(id));
-	if (!user) throw new NotFoundException(`User ${id} not found`);
-	return user;
+	res.setHeader('Content-Type', 'image/png');
+	res.sendFile(filePath);
 	}
 	@Get('/add/:name')
 	add(@Param('name') name: string): User {
@@ -25,9 +27,21 @@ export class UserController {
 	}
 	@Get(['/rm/:id', '/remove/:id'])
 	RemoveOne(@Param('id') id: string): string {
-	const found = this.userService.remove(Number(id));
+	const found = this.userService.remove(id);
 	if (!found) throw new NotFoundException(`User ${id} couldn't be removed`);
 	return 'User ' + id + ' was removed';
+	}
+	@Get(['/', '/find/all', '/find'])
+	findAll(): User[] {
+	const user = this.userService.findAll();
+	if (!user) throw new NotFoundException(`Users couldn't be found`);
+	return user;
+	}
+	@Get([':id', '/find/:id'])
+	findOne(@Param('id') id: string): User {
+	const user = this.userService.findOne(id);
+	if (!user) throw new NotFoundException(`User ${id} not found`);
+	return user;
 	}
 
 	// POST

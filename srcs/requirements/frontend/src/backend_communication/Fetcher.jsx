@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { postJson } from './Post'
-import { getAny } from './Get'
+import getAny from './Get'
 
 function Fetcher() {
   const [url, setUrl] = useState('');
@@ -30,9 +30,9 @@ function Fetcher() {
 	try {
 		if (!result || result.statusCode) throw new Error('No valid data to update');
 		let bodyJson = result;
-		if (Array.isArray(result)) bodyJson = result.map(user => ({ ...user, update: user.update + 1 }));
-		else bodyJson = { ...result, update: result.update + 1 };
-		setResult(await postJson('/user', bodyJson));
+		/*if (Array.isArray(result)) bodyJson = result.map(user => ({ ...user, update: user.update + 1 }));
+		else bodyJson = { ...result, update: result.update + 1 };*/
+		setResult(await postJson(url, bodyJson));
 	} catch (e) {
 		setError(e.message);
 		setResult(null);
@@ -53,8 +53,8 @@ function Fetcher() {
 	  <button onClick={doFetch} disabled={!url || loading}>
 		{loading ? 'Fetching...' : 'Fetch'}
 	  </button>
-	  <button onClick={upFetch}>
-		{loading ? 'Updating...' : 'Update'}
+	  <button onClick={upFetch} disabled={!url || loading}>
+		{loading ? 'Posting...' : 'Post'}
 	  </button>
 
 	  {error && <p style={{ color: 'red' }}>Error: {error}</p>}
