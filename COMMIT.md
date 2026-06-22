@@ -1,5 +1,19 @@
 ### Commit extension for more description after each commit
 
+17.6.26
+# Frontend Routing
+Includes:
+A complete routing system using React Router (react-router-dom v7) via a dedicated 'router.jsx' file
+All app pages created as separate files (one file = one feature) : Home, Login, Register, GamePage, Profile, Tournament, Friends, Settings, NotFound (404), FetcherPage
+Login and Register pages include placeholder forms (email + password / username + email + password) ready to be connected to the auth backend
+A minimal shared stylesheet 'styles/pages.css' for basic page layout
+main.jsx simplified to only render the Router
+Next Step:
+- implement auth backend (POST /auth/register + POST /auth/login)
+- connect Login and Register forms to the backend
+- add session management (JWT or cookie)
+
+
 16.6.26 17h51
 Includes:
 The beginning of a Prisma + PostgreSQL database

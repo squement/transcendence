@@ -1,21 +1,19 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
-import DrawBoard from './click_App.jsx'
-import { Click, Draw } from './click_App.jsx'
-import Fetcher from './backend_communication/Fetcher.jsx'
-import Game from './game/Game.jsx'
-import Message from './Message.jsx'
+import Router from './router.jsx'
+
+// TESTS
+// App        : default Vite template                → src/App.jsx
+// DrawBoard  : canvas drawing board test            → src/click_App.jsx
+// Click      : click interaction test               → src/click_App.jsx
+// Draw       : draw interaction test                → src/click_App.jsx
+// import App from './App.jsx'
+// import DrawBoard from './click_App.jsx'
+// import { Click, Draw } from './click_App.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-	{/* <Click />
-	<DrawBoard />
-	<Draw />
-    <App /> */}
-	<Game />
-	<Fetcher />
-	<Message />
-  </StrictMode>,
+	<StrictMode>
+		<Router />
+	</StrictMode>,
 )
