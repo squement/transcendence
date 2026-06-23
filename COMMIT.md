@@ -1,5 +1,13 @@
 ### Commit extension for more description after each commit
 
+23.6.26 13h39
+# Not so big merge
+Includes:
+A basic but fonctionnal bot for solo game that will track the ball movement only
+when said ball is in its half of the canvas
+Next Step:
+- Add a life cycle for the game ((re)start button, game mode selection...)
+
 22.6.26 13h08
 # BIG MERGE
 Includes:
