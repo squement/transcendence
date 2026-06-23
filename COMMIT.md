@@ -1,5 +1,15 @@
 ### Commit extension for more description after each commit
 
+23.6.26 16h13
+# Game cycle FINALLY added
+Includes:
+Multiple buttons to start the game (instead of the game just running in the background at any time)
+Once the game is over, it automatically goes back to the game mode selection
+Added a training mode with a big fat wall!!
+Added React memory thingie
+Next Step:
+- Merge
+
 23.6.26 13h39
 # Not so big merge
 Includes:
