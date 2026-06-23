@@ -1,4 +1,4 @@
-import { PADDLE_SPEED, PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, MAX_BALL_SPEED, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_ACCELERATION, SCORE_TO_WIN, BALL_SHIFTING, BALL_SPEED } from './game_config'
+import { PADDLE_SPEED, PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_SPACING, MAX_BALL_SPEED, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_ACCELERATION, SCORE_TO_WIN, BALL_SHIFTING, BALL_SPEED, GAME_MOD } from './game_config'
 import { Ball, Paddle, GameState, Score, Keys } from './game_types';
 
 export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, gameState: GameState, score: Score, keys: Keys, deltaTime: number) {
@@ -22,14 +22,36 @@ export function update(ball: Ball, leftPaddle: Paddle, rightPaddle: Paddle, game
 		}, 2000);
 	}
 
-if (keys.w && leftPaddle.y - PADDLE_SPEED * deltaTime > -PADDLE_SPEED * deltaTime)
+	if (keys.w && leftPaddle.y - PADDLE_SPEED * deltaTime > -PADDLE_SPEED * deltaTime)
         leftPaddle.y -= PADDLE_SPEED * deltaTime;
     if (keys.s && leftPaddle.y + PADDLE_SPEED * deltaTime < CANVAS_HEIGHT - PADDLE_HEIGHT + PADDLE_SPEED * deltaTime)
         leftPaddle.y += PADDLE_SPEED * deltaTime;
+	if (GAME_MOD == "local") {
     if (keys.up && rightPaddle.y - PADDLE_SPEED * deltaTime > -PADDLE_SPEED * deltaTime)
         rightPaddle.y -= PADDLE_SPEED * deltaTime;
     if (keys.down && rightPaddle.y + PADDLE_SPEED * deltaTime < CANVAS_HEIGHT - PADDLE_HEIGHT + PADDLE_SPEED * deltaTime)
         rightPaddle.y += PADDLE_SPEED * deltaTime;
+	}
+	else if (GAME_MOD == "solo_bot") {
+		if (ball.x >= (CANVAS_WIDTH / 2) && ball.vx > 0)
+		{
+			if ((ball.y >= (rightPaddle.y + PADDLE_HEIGHT / 2)) && (rightPaddle.y + PADDLE_SPEED * deltaTime) < (CANVAS_HEIGHT - PADDLE_HEIGHT) + PADDLE_SPEED * deltaTime)
+				rightPaddle.y += PADDLE_SPEED * deltaTime;
+			if ((ball.y <= (rightPaddle.y + PADDLE_HEIGHT / 2)) && (rightPaddle.y - PADDLE_SPEED * deltaTime) > 0 - PADDLE_SPEED * deltaTime)
+				rightPaddle.y -= PADDLE_SPEED * deltaTime;
+		}
+	}
+	else if (GAME_MOD == "solo_training") {
+		// later
+	}
+
+	else if (GAME_MOD == "online") {
+		// later
+	}
+
+	// if ((ball.current.y >= (rightPaddle.current.y + PADDLE_HEIGHT / 2)) && (rightPaddle.current.y + PADDLE_SPEED) < (CANVAS_HEIGHT - PADDLE_HEIGHT) + PADDLE_SPEED) {rightPaddle.current.y += PADDLE_SPEED;}
+	// if ((ball.current.y <= (rightPaddle.current.y + PADDLE_HEIGHT / 2)) && (rightPaddle.current.y - PADDLE_SPEED) > 0 - PADDLE_SPEED) {rightPaddle.current.y -= PADDLE_SPEED;}
+
 
 	
 	//Annoying ass collisions test left
