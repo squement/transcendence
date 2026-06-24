@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { GroupModule } from './group/group.module';
 import { AuthModule } from './auth/auth.module';
 import { SocketModule } from './services/socket.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { SocketModule } from './services/socket.module';
 	GroupModule,
 	UserModule,
 	SocketModule,
+	ChatModule,
 	JwtModule.register({
 		global:true,
 		secret: "super_cool_secret_to_change_absolutely_pls",

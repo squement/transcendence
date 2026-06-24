@@ -16,6 +16,7 @@ function Home()
 			<Link to="/friends" className="btn">Friends</Link>
 			<Link to="/settings" className="btn">Settings</Link>
 			<Link to="/fetcher" className="btn">Fetching</Link>
+			<Link to="/chat" className="btn">Chat</Link>
 		</div>
 	);
 }

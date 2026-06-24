@@ -9,6 +9,7 @@ import Friends from './pages/Friends.jsx'
 import Settings from './pages/Settings.jsx'
 import NotFound from './pages/NotFound.jsx'
 import FetcherPage from './pages/FetcherPage.jsx'
+import ChatPage from './pages/ChatPage.jsx'
 
 // App router — maps URL paths to page components
 function Router()
@@ -25,6 +26,7 @@ function Router()
 				<Route path="/friends" element={<Friends />} />
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/fetcher" element={<FetcherPage />} />
+				<Route path="/chat" element={<ChatPage />} />
 				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</BrowserRouter>
