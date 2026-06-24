@@ -40,6 +40,7 @@ export class Group {
 	}
 	rmPlayers(id_list: string[]) {
 		id_list.forEach(id => this.player_list.delete(id));
+		return this.getPlayers();
 	}
 	hasGuest(): boolean {
         return this.player_list.size > 1;

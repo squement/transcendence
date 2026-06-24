@@ -1,11 +1,12 @@
 ### Commit extension for more description after each commit
 
 24.6.26 15h24
-# Group Class for Rooms
+# Room class + Group class
 Includes:
+Functional basic Room class, contains players and spectators
 Functional group class, contains a list of users, can be displayed, passed, read, managed, update automatically when a user is deleted, etc
 Next Step:
-- Connect to rooms
+- Connect Room to Game
 
 22.6.26 13h08
 # BIG MERGE

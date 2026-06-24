@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { postJson } from './Post'
 import getAny from './Get'
+import { LogoutButton } from '../LoginPage'
+import LoginPage from '../LoginPage'
 
 function Fetcher() {
   const [url, setUrl] = useState('');
@@ -43,6 +45,8 @@ function Fetcher() {
 
   return (
 	<div>
+	<LoginPage />
+	<LogoutButton />
 	  <input
 		type="text"
 		value={url}

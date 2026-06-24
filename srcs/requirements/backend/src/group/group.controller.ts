@@ -20,7 +20,6 @@ export class GroupController {
 	createGroup(@Req() req: Request) : Group | undefined {
 		const user = this.getMe(req);
 		if (!user) throw new NotFoundException(`Can't find requesting user`);
-		console.log(user);
 		return this.groupService.new(user.id, null);
 	}
 	/*@Get(['/rm/:id', '/remove/:id'])
