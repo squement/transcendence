@@ -1,7 +1,7 @@
 import { Group } from '../group/group.model';
-/*import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
+import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED } from '../game/game_config';
-
+/*
 // Group : gere joueurs (host + guest)
 // La Room NE gere PAS les joueurs directement !!!!!!!
 import { Group } from '../group/group.model';
@@ -9,10 +9,28 @@ import { Group } from '../group/group.model';
 export type RoomStatus = 'waiting' | 'playing' | 'finished';
 export type RoomMode = 'local' | 'online' | 'solo_bot' | 'solo_training';
 */
+
 export class Room {
+	/*public ball: Ball = {
+        x: CANVAS_WIDTH / 2,
+        y: CANVAS_HEIGHT / 2,
+        vx: 3,
+        vy: 2,
+        speed: BALL_SPEED,
+    };
+	public leftPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+    public rightPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+    public score: Score = { leftPlayer: 0, rightPlayer: 0 };
+    public keys: Keys = { w: false, s: false, up: false, down: false };
+    public gameState: GameState = { gameOver: false };
+    public resetPending: boolean = false;
+    //public player1Id: number | null = null;
+    //public player2Id: number | null = null;*/
+
 	private players: Group = new Group(2);
 	private spectators: Group = new Group(null);
-	public id = this.players.id;
+	public readonly id = this.players.id;
+
 	constructor(
 		//public groupService: GroupService,
 		host: string
@@ -29,6 +47,7 @@ export class Room {
 		);
 	}
 	rmPlayers(players: string[]) {
+		// slider system for now, later should keep non-leaving user with it's paddle (obv)
 		this.players.rmPlayers(players);
 		this.players.addPlayers(
 			this.spectators.rmPlayers(players)

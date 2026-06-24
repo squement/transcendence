@@ -3,7 +3,7 @@ import { UserService } from '../user/user.service'
 
 export class Group {
 	public player_max: number = -1;
-	public id: any | null = null;
+	public readonly id: any | null = null;
 	private player_list = new Set<string>();
 	constructor(
 		max: number | null

@@ -48,6 +48,11 @@ export class RoomService {
 	findOne(roomId: string) {
 		return this.rooms.get(roomId);
 	}
+	findAny() {
+		//room testing only
+		const room = this.rooms.values().next().value;
+		return room?.id
+	}
 	findAll() {
 		return [...this.rooms.values()].map(r => ({
 		id: r.id,

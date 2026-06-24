@@ -11,21 +11,23 @@ import Profile from './user/user_profile.jsx'
 import Game from './game/Game.jsx'
 import Message from './Message.jsx'
 import Broadcast from './backend_communication/Socketer'
+import { initSocket } from './backend_communication/socket'
 
 export default function AppRouter() {
-  const { user, loading } = useAuth();
+	initSocket();
+	const { user, loading } = useAuth();
 
-  if (loading) return <p>Chargement...</p>;
-  if (!user) return <LoginPage />;
+	if (loading) return <p>Chargement...</p>;
+	if (!user) return <LoginPage />;
 
-  return (
-    <>
-		<LogoutButton />
-		<Broadcast />
-		<Game />
-		<Fetcher />
-		<Profile />
-		<Message />
-    </>
-  );
+	return (
+		<>
+			<LogoutButton />
+			<Broadcast />
+			<Game />
+			<Fetcher />
+			<Profile />
+			<Message />
+		</>
+	);
 }

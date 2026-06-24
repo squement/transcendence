@@ -57,7 +57,7 @@ function Game() {
             leftPaddle.current = state.leftPaddle;
             rightPaddle.current = state.rightPaddle;
             score.current = state.score;
-            render(ctx, ball, leftPaddle, rightPaddle, score, user.username);
+            render(ctx, ball, leftPaddle, rightPaddle, score, user?.id);
         });
 
         return () => {

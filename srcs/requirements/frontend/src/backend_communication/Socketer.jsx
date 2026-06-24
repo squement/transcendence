@@ -1,20 +1,22 @@
 import { useSocket } from './useSocket';
 import { io } from 'socket.io-client';
+import { socket } from './socket'
 
 export default function Broadcast() {
   const [messages, users, annoncement] = useSocket();
 
   function Emit() {
-	const socket = io('/', {
+	/*const socket = io('/', {
 		path: '/backend/socket.io',
-	});
+	});*/
 	console.log('emitting');
-	socket.emit('message', {
+	socket.emit('joinRoom');
+	/*socket.emit('message', {
 		type: 'notification',
 		payload: {
 			title: `User responded`,
 			text: `Hi from User`
-	}});
+	}});*/
   }
   return (
     <div>

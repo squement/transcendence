@@ -3,6 +3,7 @@ import { postJson } from './Post'
 import getAny from './Get'
 import { LogoutButton } from '../LoginPage'
 import LoginPage from '../LoginPage'
+import Game from '../game/Game'
 
 function Fetcher() {
   const [url, setUrl] = useState('');
@@ -45,6 +46,7 @@ function Fetcher() {
 
   return (
 	<div>
+	<Game />
 	<LoginPage />
 	<LogoutButton />
 	  <input

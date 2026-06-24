@@ -1,11 +1,13 @@
 ### Commit extension for more description after each commit
 
 24.6.26 15h24
-# Room class + Group class
+# GameGateway room handling + Room class + Group class
 Includes:
+First room limited gateway emit
 Functional basic Room class, contains players and spectators
 Functional group class, contains a list of users, can be displayed, passed, read, managed, update automatically when a user is deleted, etc
 Next Step:
+- Connect Room to gateway
 - Connect Room to Game
 
 22.6.26 13h08

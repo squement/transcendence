@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
+import { socket } from './socket'
 
 export function useSocket() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -7,9 +8,10 @@ export function useSocket() {
   const [users, setUsers] = useState([]);
 
 	useEffect(() => {
-		const socket = io('/', {
+		/*const socket = io('/', {
 		path: '/backend/socket.io',
-		});
+		});*/
+		if (!socket.connected) socket.connect();
 		socket.on('connect', () => {
 		console.log('Connected!', socket.id);
 		});
