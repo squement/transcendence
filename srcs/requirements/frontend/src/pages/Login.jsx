@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../styles/pages.css'
+import { LogoutButton } from '../LoginPage'
+import LoginPage from '../LoginPage'
 
 // Login page — email + password form
 function Login()
@@ -41,6 +43,8 @@ function Login()
 			</form>
 			<p>No account? <Link to="/register">Register</Link></p>
 			<Link to="/">← Back</Link>
+			<LoginPage />
+			<LogoutButton />
 		</div>
 	);
 }

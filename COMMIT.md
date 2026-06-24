@@ -1,5 +1,12 @@
 ### Commit extension for more description after each commit
 
+24.6.26 15h24
+# Group Class for Rooms
+Includes:
+Functional group class, contains a list of users, can be displayed, passed, read, managed, update automatically when a user is deleted, etc
+Next Step:
+- Connect to rooms
+
 22.6.26 13h08
 # BIG MERGE
 Includes:
