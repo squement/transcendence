@@ -24,4 +24,5 @@ export interface Keys {
 
 export interface GameState {
 	gameOver: boolean;
+	paused: boolean;
 }

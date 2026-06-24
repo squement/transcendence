@@ -17,6 +17,8 @@ function Game() {
 	const socket = useRef(null);
 	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
 	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
+	const [isPaused, setIsPaused] = useState(false);
+	const isPausedRef = useRef(false);
 
 	// écoute du clavier
 	useEffect(() => {
@@ -72,13 +74,17 @@ function Game() {
 			leftPaddle.current = state.leftPaddle;
 			rightPaddle.current = state.rightPaddle;
 			score.current = state.score;
-			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode);
+
+			isPausedRef.current = state.gameState.paused;
+    		setIsPaused(state.gameState.paused);
+			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current);
 		});
 
 		socket.current.on('gameOver', (data) => {
 			sessionStorage.removeItem('gameStarted');
 			sessionStorage.removeItem('gameMode');
-
+			
+			setIsPaused(false);
 			setGameMode(null);
 			setGameStarted(false); // on revient à l'écran du bouton
 			score.current = data.score;
@@ -101,6 +107,7 @@ function Game() {
 		setGameStarted(true);
 	};
 
+	const handlePause = () => { socket.current.emit('pause'); }
 	return (
 	<>
 		{!gameStarted ? (
@@ -113,7 +120,19 @@ function Game() {
 				</table>
 			</div>
 		) : (
-			<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
+			<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+				<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
+				{gameMode != "online" ? (
+					<div>
+						<button onClick={handlePause}>
+							{isPaused == true ? "Resume" : "Pause"}
+						</button>
+						<button onClick={() => socket.current.emit('endGame')}>End Game</button>
+					</div>
+				) : (
+					null
+				)}
+			</div>
 		)}
 	</>
 	);

@@ -1,5 +1,15 @@
 ### Commit extension for more description after each commit
 
+24.6.23 10h11
+# Quality of life update
+Includes:
+Pause/EndGame buttons added to be able to pause/end the game whenever players want
+(only in solo/local mode for now), and a little arrow facing the trajectory of the
+ball was added when the game is paused to make the player aware of the trajectory
+once they resume the game
+Next Step:
+- Help my people
+
 23.6.26 16h13
 # Game cycle FINALLY added
 Includes:

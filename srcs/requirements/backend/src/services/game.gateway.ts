@@ -17,11 +17,12 @@ export class GameGateway {
     private rightPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
     private score: Score = { leftPlayer: 0, rightPlayer: 0 };
     private keys: Keys = { w: false, s: false, up: false, down: false };
-    private gameState: GameState = { gameOver: false };
+    private gameState: GameState = { gameOver: false, paused: false };
 	private gameMode: string = "";
     private lastTime: number = Date.now();
     private gameInterval: any = null; // ← nouveau
 	private resetPending: boolean = false;
+	private endGame: boolean = false;
 
     constructor() {
         console.log('GameGateway created');
@@ -31,6 +32,16 @@ export class GameGateway {
     handleInputs(@MessageBody() data: { keys: Keys }) {
         this.keys = data.keys;
     }
+
+	@SubscribeMessage('pause')
+	handlePause() {
+		this.gameState.paused = !this.gameState.paused;
+	}
+
+	@SubscribeMessage('endGame')
+	handleEndGame() {
+		this.endGame = true;
+	}
 
     @SubscribeMessage('startGame') // ← nouveau
     handleStartGame(@MessageBody() data: { mode: string }) {
@@ -48,8 +59,9 @@ export class GameGateway {
 		this.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
 		this.score = { leftPlayer: 0, rightPlayer: 0 };
 		this.keys = { w: false, s: false, up: false, down: false };
-		this.gameState = { gameOver: false };
+		this.gameState = { gameOver: false, paused: false };
 		this.resetPending = false;
+		this.endGame = false;
 		this.lastTime = Date.now();
 
         this.gameInterval = setInterval(() => {
@@ -57,10 +69,10 @@ export class GameGateway {
 			const deltaTime = (now - this.lastTime) / 1000;
 			this.lastTime = now;
 
-			if (!this.gameState.gameOver) {
+			if (!this.gameState.gameOver && !this.gameState.paused) {
 				update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime, this.gameMode);
 			}
-			else {
+			else if (this.gameState.gameOver && !this.gameState.paused) {
 				if (!this.resetPending) {
 					this.resetPending = true;
 					setTimeout(() => {
@@ -80,7 +92,7 @@ export class GameGateway {
 			}
 					
 			// vérification après update, pas dans un else
-			if (this.score.leftPlayer >= SCORE_TO_WIN || this.score.rightPlayer >= SCORE_TO_WIN) {
+			if ((this.score.leftPlayer >= SCORE_TO_WIN || this.score.rightPlayer >= SCORE_TO_WIN) || (this.endGame && this.gameMode != "online")) {
 				this.server.emit('gameOver', { score: this.score });
 				clearInterval(this.gameInterval);
 				this.gameInterval = null;
