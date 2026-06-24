@@ -1,99 +1,75 @@
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody } from '@nestjs/websockets';
-import { Server } from 'socket.io';
-import { update } from '../game/game_update';
-import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
-import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED, FRAMERATE, SCORE_TO_WIN } from '../game/game_config';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, ConnectedSocket, OnGatewayDisconnect } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { RoomService } from '../room/room.service';
+import { User } from '../user/user.model';
+import { Keys } from '../game/game_types';
+import { RoomMode } from '../room/room.model';
 
-@WebSocketGateway({ 
+@WebSocketGateway({
     cors: { origin: 'http://localhost:5173' },
     path: '/socket.io',
 })
-export class GameGateway {
+export class GameGateway implements OnGatewayDisconnect {
     @WebSocketServer()
     server!: Server;
 
-    private ball: Ball = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2, vx: 3, vy: 2, speed: BALL_SPEED };
-    private leftPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-    private rightPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-    private score: Score = { leftPlayer: 0, rightPlayer: 0 };
-    private keys: Keys = { w: false, s: false, up: false, down: false };
-    private gameState: GameState = { gameOver: false };
-	private gameMode: string = "";
-    private lastTime: number = Date.now();
-    private gameInterval: any = null; // ← nouveau
-	private resetPending: boolean = false;
+    private socketRooms = new Map<string, string>();
 
-    constructor() {
-        console.log('GameGateway created');
+    constructor(private roomService: RoomService) {}
+
+    // Used by solo/local modes: maps directly to createRoom with immediate start
+    @SubscribeMessage('startGame')
+    handleStartGame(
+        @MessageBody() data: { mode: string, user?: User },
+        @ConnectedSocket() client: Socket
+    ) {
+        this.handleCreateRoom({ user: data.user ?? null, mode: data.mode as RoomMode }, client);
+    }
+
+    @SubscribeMessage('createRoom')
+    handleCreateRoom(
+        @MessageBody() data: { user: User | null, mode: RoomMode },
+        @ConnectedSocket() client: Socket
+    ) {
+        const room = this.roomService.create(data.user);
+        if (!room) return;
+
+        room.mode = data.mode ?? 'local';
+        client.join(room.id);
+        this.socketRooms.set(client.id, room.id);
+        client.emit('roomCreated', { roomId: room.id });
+
+        if (room.mode !== 'online') {
+            room.status = 'playing';
+            this.roomService.startGame(this.server, room.id);
+            client.emit('gameStart', { roomId: room.id });
+        }
+    }
+
+    @SubscribeMessage('joinRoom')
+    handleJoinRoom(
+        @MessageBody() data: { roomId: string, user: User },
+        @ConnectedSocket() client: Socket
+    ) {
+        const room = this.roomService.join(data.roomId, data.user);
+        if (!room) return;
+
+        client.join(room.id);
+        this.socketRooms.set(client.id, room.id);
+        this.server.to(room.id).emit('gameStart', { roomId: room.id });
+        this.roomService.startGame(this.server, room.id);
     }
 
     @SubscribeMessage('inputs')
-    handleInputs(@MessageBody() data: { keys: Keys }) {
-        this.keys = data.keys;
+    handleInputs(@MessageBody() data: { roomId: string, keys: Keys }) {
+        this.roomService.handleInputs(data.roomId, data.keys);
     }
 
-    @SubscribeMessage('startGame') // ← nouveau
-    handleStartGame(@MessageBody() data: { mode: string }) {
-        if (this.gameInterval) return; // déjà lancé
-
-		this.gameMode = data.mode;
-		this.ball = { 
-			x: CANVAS_WIDTH / 2, 
-			y: CANVAS_HEIGHT / 2, 
-			vx: Math.random() > 0.5 ? 3 : -3,
-			vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
-			speed: BALL_SPEED 
-		};
-		this.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-		this.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-		this.score = { leftPlayer: 0, rightPlayer: 0 };
-		this.keys = { w: false, s: false, up: false, down: false };
-		this.gameState = { gameOver: false };
-		this.resetPending = false;
-		this.lastTime = Date.now();
-
-        this.gameInterval = setInterval(() => {
-			const now = Date.now();
-			const deltaTime = (now - this.lastTime) / 1000;
-			this.lastTime = now;
-
-			if (!this.gameState.gameOver) {
-				update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime, this.gameMode);
-			}
-			else {
-				if (!this.resetPending) {
-					this.resetPending = true;
-					setTimeout(() => {
-						this.ball = { 
-							x: CANVAS_WIDTH / 2, 
-							y: CANVAS_HEIGHT / 2, 
-							vx: Math.random() > 0.5 ? 3 : -3,
-							vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
-							speed: BALL_SPEED 
-						};
-						this.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-						this.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-						this.gameState.gameOver = false;
-						this.resetPending = false;
-					}, 2000);
-				}
-			}
-					
-			// vérification après update, pas dans un else
-			if (this.score.leftPlayer >= SCORE_TO_WIN || this.score.rightPlayer >= SCORE_TO_WIN) {
-				this.server.emit('gameOver', { score: this.score });
-				clearInterval(this.gameInterval);
-				this.gameInterval = null;
-				return;
-			}
-
-			this.server.emit('gameState', {
-				ball: this.ball,
-				leftPaddle: this.leftPaddle,
-				rightPaddle: this.rightPaddle,
-				score: this.score,
-				gameState: this.gameState
-			});
-		}, 1000 / FRAMERATE);
+    handleDisconnect(client: Socket) {
+        const roomId = this.socketRooms.get(client.id);
+        if (roomId) {
+            this.roomService.endGame(roomId);
+            this.socketRooms.delete(client.id);
+        }
     }
 }

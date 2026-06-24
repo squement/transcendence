@@ -5,7 +5,9 @@ import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
 
-function Game() {
+// roomId : guest joining an existing online room (from URL ?roomId=xxx)
+// mode   : game mode passed from GamePage (auto-starts without showing buttons)
+function Game({ roomId: roomIdProp, mode: modeProp } = {}) {
 	const canvasRef = useRef(null);
 	const leftPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
 	const rightPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
@@ -13,12 +15,13 @@ function Game() {
 	const keysBE = useRef({ w: false, s: false, up: false, down: false });
 	const score = useRef({ leftPlayer: 0, rightPlayer: 0 });
 	const { user } = useAuth();
-	// const [gameStarted, setGameStarted] = useState(false);
 	const socket = useRef(null);
-	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
-	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
+	const roomIdRef = useRef(roomIdProp || null);
 
-	// écoute du clavier
+	const [gameMode, setGameMode] = useState(modeProp || sessionStorage.getItem('gameMode') || null);
+	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
+	const [inviteUrl, setInviteUrl] = useState(null);
+
 	useEffect(() => {
 		const handleKeyDown = (e) => {
 			if (e.key === "w" || e.key === "W") keysBE.current.w = true;
@@ -40,11 +43,36 @@ function Game() {
 		}
 	}, []);
 
+	// Persistent socket connection
 	useEffect(() => {
 		socket.current = io('/', { path: '/backend/socket.io' });
 
 		socket.current.on('connect', () => {
-			console.log('connecté au backend', socket.current.id);
+			console.log('connected to backend', socket.current.id);
+			// Auto-start if props provided (from GamePage or URL)
+			if (roomIdProp) {
+				socket.current.emit('joinRoom', { roomId: roomIdProp, user });
+			} else if (modeProp) {
+				if (modeProp === 'online') {
+					socket.current.emit('createRoom', { user, mode: 'online' });
+				} else {
+					socket.current.emit('startGame', { mode: modeProp, user });
+				}
+			}
+		});
+
+		// roomCreated: backend confirms room was created, gives us the roomId
+		socket.current.on('roomCreated', ({ roomId }) => {
+			roomIdRef.current = roomId;
+			// Only show invite link for online mode
+			if (gameMode === 'online') {
+				setInviteUrl(`${window.location.origin}/game?roomId=${roomId}`);
+			}
+		});
+
+		socket.current.on('gameStart', () => {
+			sessionStorage.setItem('gameStarted', 'true');
+			setGameStarted(true);
 		});
 
 		return () => {
@@ -52,21 +80,17 @@ function Game() {
 		};
 	}, []);
 
-	// connexion socket + boucle de rendu
+	// Game loop: starts only when gameStarted becomes true
 	useEffect(() => {
 		if (!gameStarted) return;
 
 		const canvas = canvasRef.current;
 		const ctx = canvas.getContext("2d");
 
-		socket.current.emit("startGame", { mode: gameMode });
-
-		// envoyer les inputs au backend 60fps
 		const inputInterval = setInterval(() => {
-			socket.current.emit('inputs', { keys: keysBE.current });
+			socket.current.emit('inputs', { roomId: roomIdRef.current, keys: keysBE.current });
 		}, 1000 / FRAMERATE);
 
-		// recevoir l'état du jeu et dessiner
 		socket.current.on('gameState', (state) => {
 			ball.current = state.ball;
 			leftPaddle.current = state.leftPaddle;
@@ -75,35 +99,58 @@ function Game() {
 			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode);
 		});
 
-		socket.current.on('gameOver', (data) => {
+		socket.current.on('gameOver', () => {
 			sessionStorage.removeItem('gameStarted');
 			sessionStorage.removeItem('gameMode');
-
 			setGameMode(null);
-			setGameStarted(false); // on revient à l'écran du bouton
-			score.current = data.score;
-			score.current.leftPlayer = 0; // on garde le score final
-			score.current.rightPlayer = 0; // on garde le score final
+			setGameStarted(false);
+			roomIdRef.current = null;
+			setInviteUrl(null);
 		});
 
 		return () => {
 			clearInterval(inputInterval);
-			socket.current.off('gameState'); // juste supprimer les listeners
-			socket.current.off('gameOver');  // sans déconnecter le socket
+			socket.current.off('gameState');
+			socket.current.off('gameOver');
 		};
 	}, [gameStarted]);
 
 	const handleStart = (mode) => {
-
-		sessionStorage.setItem('gameStarted', 'true');
 		sessionStorage.setItem('gameMode', mode);
-		setGameMode(mode)
-		setGameStarted(true);
+		setGameMode(mode);
+
+		if (mode === 'online') {
+			socket.current.emit('createRoom', { user, mode: 'online' });
+			// gameStart arrives when 2nd player joins
+		} else {
+			socket.current.emit('startGame', { mode, user });
+			// gameStart arrives immediately from backend
+		}
 	};
+
+	// Waiting screen for online mode (before 2nd player joins)
+	if (gameMode === 'online' && !gameStarted) {
+		return (
+			<div>
+				<h3>En attente du 2ème joueur...</h3>
+				{inviteUrl ? (
+					<div>
+						<p>Lien d'invitation :</p>
+						<code style={{ userSelect: 'all' }}>{inviteUrl}</code>
+						<button onClick={() => navigator.clipboard.writeText(inviteUrl)} style={{ marginLeft: '8px' }}>
+							Copier
+						</button>
+					</div>
+				) : (
+					<p>Création de la room...</p>
+				)}
+			</div>
+		);
+	}
 
 	return (
 	<>
-		{!gameStarted ? (
+		{!gameStarted && !modeProp && !roomIdProp ? (
 			<div>
 				<table>
 					<tr><button onClick={() => handleStart("solo_bot")}>PPPB Mode</button></tr>

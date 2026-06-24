@@ -20,4 +20,5 @@ export class PrismaService implements OnModuleInit {
 
   get user() { return this.client.user; }
   get testConfig() { return this.client.testConfig; }
+  get game() { return this.client.game; }
 }

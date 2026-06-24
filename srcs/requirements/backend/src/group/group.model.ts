@@ -17,4 +17,8 @@ export class Group {
 		this.guest = user;
 		return this;
 	}
+
+	hasGuest(): boolean {
+		return this.guest !== null;
+	}
 }
