@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
+import { socket } from '../backend_communication/socket'
 import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED, FRAMERATE } from './game_config.js'
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext.jsx';
@@ -14,7 +15,7 @@ function Game() {
 	const score = useRef({ leftPlayer: 0, rightPlayer: 0 });
 	const { user } = useAuth();
 	// const [gameStarted, setGameStarted] = useState(false);
-	const socket = useRef(null);
+	// const socket = useRef(null);
 	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
 	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
 	const [isPaused, setIsPaused] = useState(false);
@@ -43,15 +44,16 @@ function Game() {
 	}, []);
 
 	useEffect(() => {
-		socket.current = io('/', { path: '/backend/socket.io' });
+		if (!socket.connected) socket.connect();
+		//socket = io('/', { path: '/backend/socket.io' });
 
-		socket.current.on('connect', () => {
-			console.log('connecté au backend', socket.current.id);
+		socket.on('connect', () => {
+			console.log('connecté au backend', socket.id);
 		});
 
-		return () => {
-			socket.current.disconnect();
-		};
+		/*return () => {
+			socket.disconnect();
+		};*/
 	}, []);
 
 	// connexion socket + boucle de rendu
@@ -61,15 +63,15 @@ function Game() {
 		const canvas = canvasRef.current;
 		const ctx = canvas.getContext("2d");
 
-		socket.current.emit("startGame", { mode: gameMode });
+		socket.emit("startGame", { mode: gameMode });
 
 		// envoyer les inputs au backend 60fps
 		const inputInterval = setInterval(() => {
-			socket.current.emit('inputs', { keys: keysBE.current });
+			socket.emit('inputs', { keys: keysBE.current });
 		}, 1000 / FRAMERATE);
 
 		// recevoir l'état du jeu et dessiner
-		socket.current.on('gameState', (state) => {
+		socket.on('gameState', (state) => {
 			ball.current = state.ball;
 			leftPaddle.current = state.leftPaddle;
 			rightPaddle.current = state.rightPaddle;
@@ -80,7 +82,7 @@ function Game() {
 			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current);
 		});
 
-		socket.current.on('gameOver', (data) => {
+		socket.on('gameOver', (data) => {
 			sessionStorage.removeItem('gameStarted');
 			sessionStorage.removeItem('gameMode');
 			
@@ -94,8 +96,8 @@ function Game() {
 
 		return () => {
 			clearInterval(inputInterval);
-			socket.current.off('gameState'); // juste supprimer les listeners
-			socket.current.off('gameOver');  // sans déconnecter le socket
+			socket.off('gameState'); // juste supprimer les listeners
+			socket.off('gameOver');  // sans déconnecter le socket
 		};
 	}, [gameStarted]);
 
@@ -107,7 +109,7 @@ function Game() {
 		setGameStarted(true);
 	};
 
-	const handlePause = () => { socket.current.emit('pause'); }
+	const handlePause = () => { socket.emit('pause'); }
 	return (
 	<>
 		{!gameStarted ? (
@@ -127,7 +129,7 @@ function Game() {
 						<button onClick={handlePause}>
 							{isPaused == true ? "Resume" : "Pause"}
 						</button>
-						<button onClick={() => socket.current.emit('endGame')}>End Game</button>
+						<button onClick={() => socket.emit('endGame')}>End Game</button>
 					</div>
 				) : (
 					null

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.model'
+import { eventBus } from "../app.events";
 
 // users.service.ts — @Injectable() service that holds/manages users
 @Injectable()
@@ -14,6 +15,7 @@ export class UserService {
   remove(id: any): boolean {
 	const before = this.users.length;
 	this.users = this.users.filter(u => u.id !== id);
+	eventBus.emit("userDeleted", id);
 	return this.users.length < before;// false if id didn't exist
   }
   updateMany(updated: User[]): User[] {
