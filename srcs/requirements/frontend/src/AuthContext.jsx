@@ -15,22 +15,14 @@ export function AuthProvider({ children }) {
 		.finally(() => setLoading(false));
 	}, []);
 
-	const login = async (username) => {
+	const login = async (identifier, password) => {
 		try {
-		const res = await getAny(`/user/add/${ username }`);
-		console.log('getAny result:', res);
-		await apiFetch('/auth/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				id: res.id,
-			}),
-			// body: JSON.stringify({ username }),
-		});
-		const profile = await apiFetch('/auth/me');
-		setUser(profile);
+			await apiFetch('/auth/login', {
+				method: 'POST',
+				body: JSON.stringify({ identifier, password }),
+			});
+			const profile = await apiFetch('/auth/me');
+			setUser(profile);
 		} catch (e) {
 			console.log('login error:', e.message);
 		}
@@ -40,7 +32,7 @@ export function AuthProvider({ children }) {
 		await apiFetch('/auth/logout', { method: 'POST' });
 		setUser(null);
 	};
-	
+
 	return (
 		<AuthContext.Provider value={{ user, login, logout, loading }}>
 			{children}

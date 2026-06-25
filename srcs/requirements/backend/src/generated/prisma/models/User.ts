@@ -28,10 +28,14 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
+  gamesPlayed: number | null
+  gamesWon: number | null
 }
 
 export type UserSumAggregateOutputType = {
   id: number | null
+  gamesPlayed: number | null
+  gamesWon: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -40,6 +44,9 @@ export type UserMinAggregateOutputType = {
   updatedAt: Date | null
   username: string | null
   email: string | null
+  password: string | null
+  gamesPlayed: number | null
+  gamesWon: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,6 +55,9 @@ export type UserMaxAggregateOutputType = {
   updatedAt: Date | null
   username: string | null
   email: string | null
+  password: string | null
+  gamesPlayed: number | null
+  gamesWon: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -56,16 +66,23 @@ export type UserCountAggregateOutputType = {
   updatedAt: number
   username: number
   email: number
+  password: number
+  gamesPlayed: number
+  gamesWon: number
   _all: number
 }
 
 
 export type UserAvgAggregateInputType = {
   id?: true
+  gamesPlayed?: true
+  gamesWon?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
+  gamesPlayed?: true
+  gamesWon?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -74,6 +91,9 @@ export type UserMinAggregateInputType = {
   updatedAt?: true
   username?: true
   email?: true
+  password?: true
+  gamesPlayed?: true
+  gamesWon?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -82,6 +102,9 @@ export type UserMaxAggregateInputType = {
   updatedAt?: true
   username?: true
   email?: true
+  password?: true
+  gamesPlayed?: true
+  gamesWon?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -90,6 +113,9 @@ export type UserCountAggregateInputType = {
   updatedAt?: true
   username?: true
   email?: true
+  password?: true
+  gamesPlayed?: true
+  gamesWon?: true
   _all?: true
 }
 
@@ -185,6 +211,9 @@ export type UserGroupByOutputType = {
   updatedAt: Date
   username: string
   email: string
+  password: string
+  gamesPlayed: number
+  gamesWon: number
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -216,6 +245,9 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringFilter<"User"> | string
+  gamesPlayed?: Prisma.IntFilter<"User"> | number
+  gamesWon?: Prisma.IntFilter<"User"> | number
 }
 
 export type UserOrderByWithRelationInput = {
@@ -224,6 +256,9 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -235,6 +270,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  password?: Prisma.StringFilter<"User"> | string
+  gamesPlayed?: Prisma.IntFilter<"User"> | number
+  gamesWon?: Prisma.IntFilter<"User"> | number
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -243,6 +281,9 @@ export type UserOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -259,6 +300,9 @@ export type UserScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  gamesPlayed?: Prisma.IntWithAggregatesFilter<"User"> | number
+  gamesWon?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -266,6 +310,9 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   username: string
   email: string
+  password: string
+  gamesPlayed?: number
+  gamesWon?: number
 }
 
 export type UserUncheckedCreateInput = {
@@ -274,6 +321,9 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   username: string
   email: string
+  password: string
+  gamesPlayed?: number
+  gamesWon?: number
 }
 
 export type UserUpdateInput = {
@@ -281,6 +331,9 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateInput = {
@@ -289,6 +342,9 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserCreateManyInput = {
@@ -297,6 +353,9 @@ export type UserCreateManyInput = {
   updatedAt?: Date | string
   username: string
   email: string
+  password: string
+  gamesPlayed?: number
+  gamesWon?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -304,6 +363,9 @@ export type UserUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -312,6 +374,9 @@ export type UserUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
+  gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -320,10 +385,15 @@ export type UserCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -332,6 +402,9 @@ export type UserMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -340,10 +413,15 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  password?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  gamesPlayed?: Prisma.SortOrder
+  gamesWon?: Prisma.SortOrder
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -370,6 +448,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   username?: boolean
   email?: boolean
+  password?: boolean
+  gamesPlayed?: boolean
+  gamesWon?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -378,6 +459,9 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   username?: boolean
   email?: boolean
+  password?: boolean
+  gamesPlayed?: boolean
+  gamesWon?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -386,6 +470,9 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   username?: boolean
   email?: boolean
+  password?: boolean
+  gamesPlayed?: boolean
+  gamesWon?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -394,9 +481,12 @@ export type UserSelectScalar = {
   updatedAt?: boolean
   username?: boolean
   email?: boolean
+  password?: boolean
+  gamesPlayed?: boolean
+  gamesWon?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "username" | "email", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "username" | "email" | "password" | "gamesPlayed" | "gamesWon", ExtArgs["result"]["user"]>
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
@@ -407,6 +497,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date
     username: string
     email: string
+    password: string
+    gamesPlayed: number
+    gamesWon: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -835,6 +928,9 @@ export interface UserFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly gamesPlayed: Prisma.FieldRef<"User", 'Int'>
+  readonly gamesWon: Prisma.FieldRef<"User", 'Int'>
 }
     
 

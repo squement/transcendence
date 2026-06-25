@@ -13,10 +13,20 @@ function Register()
 	const [password, setPassword] = useState('');
 
 	// Placeholder for the mmoent
-	function handleSubmit(event)
+	async function handleSubmit(event)
 	{
 		event.preventDefault();
-		console.log('Register attempted with:', username, email);
+		const res = await fetch('/backend/auth/register', {
+			method: 'POST',
+			headers: { 'Content-type': 'application/json' },
+			body: JSON.stringify({ username, email, password }),
+		});
+		if (res.ok) {
+			console.log('NEW USER IN THE FCKIN DATABASE LETS GOOOOO');
+			window.location.href = "/";
+		}
+		else
+			console.log('no new user :(', await res.json());
 	}
 
 	return (

@@ -14,11 +14,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  username  String   @unique
-  email     String   @unique
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  username    String   @unique
+  email       String   @unique
+  password    String
+  gamesPlayed Int      @default(0)
+  gamesWon    Int      @default(0)
 }
 
 model TestConfig {
