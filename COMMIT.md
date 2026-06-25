@@ -1,5 +1,51 @@
 ### Commit extension for more description after each commit
 
+25.6.26 14h26
+# Merge Qualitiy of life + (GameGateway room handling + Room class + Group class)
+Includes:
+Updated game using room sockets, room service existing but the game is still not unique
+Next Step:
+- Connect User to Room in gateway
+- Connect Room to Game
+
+24.6.26 15h24
+# GameGateway room handling + Room class + Group class
+Includes:
+First room gateway, active and working but no user-room recognition and no unique game instance
+Functional basic Room class, contains players and spectators
+Functional group class, contains a list of users, can be displayed, passed, read, managed, update automatically when a user is deleted, etc
+Next Step:
+- Connect User to Room in gateway
+- Connect Room to Game
+
+24.6.23 10h11
+# Quality of life update
+Includes:
+Pause/EndGame buttons added to be able to pause/end the game whenever players want
+(only in solo/local mode for now), and a little arrow facing the trajectory of the
+ball was added when the game is paused to make the player aware of the trajectory
+once they resume the game
+Next Step:
+- Help my people
+
+23.6.26 16h13
+# Game cycle FINALLY added
+Includes:
+Multiple buttons to start the game (instead of the game just running in the background at any time)
+Once the game is over, it automatically goes back to the game mode selection
+Added a training mode with a big fat wall!!
+Added React memory thingie
+Next Step:
+- Merge
+
+23.6.26 13h39
+# Not so big merge
+Includes:
+A basic but fonctionnal bot for solo game that will track the ball movement only
+when said ball is in its half of the canvas
+Next Step:
+- Add a life cycle for the game ((re)start button, game mode selection...)
+
 22.6.26 13h08
 # BIG MERGE
 Includes:
