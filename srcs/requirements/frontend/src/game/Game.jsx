@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { io } from 'socket.io-client'
+import { socket } from '../backend_communication/socket'
 import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED, FRAMERATE } from './game_config.js'
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext';
@@ -39,8 +40,6 @@ function Game() {
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-
-        const socket = io('/', { path: '/backend/socket.io' });
 
         socket.on('connect', () => {
             console.log('connecté au backend', socket.id);

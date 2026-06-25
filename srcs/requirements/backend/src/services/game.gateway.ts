@@ -21,6 +21,7 @@ export class GameGateway {
     private keys: Keys = { w: false, s: false, up: false, down: false };
     private gameState: GameState = { gameOver: false };
 	private lastTime: number = Date.now();
+	//public roomId: string | undefined = undefined;
 
     constructor(public roomService: RoomService) {
         console.log('GameGateway created');
@@ -39,6 +40,7 @@ export class GameGateway {
 	) {
 		const roomId = this.roomService.findAny();
 		console.log('attempts to join ', roomId);
+		socket.data.roomId = roomId;
 		socket.join(roomId);
 		//YAYY
 	}
@@ -47,37 +49,42 @@ export class GameGateway {
 		@ConnectedSocket() socket: any,
 		//@MessageBody() roomId: string,
 	) {
-		const roomId = this.roomService.findAny();
-		socket.leave(roomId);
+		//const roomId = this.roomService.findAny();
+		if (socket.data.roomId)
+			socket.leave(socket.data.roomId);
 	}
 
     // boucle de jeu
     afterInit() {
         setInterval(() => {
-			const now = Date.now();
-			const deltaTime = (now - this.lastTime) / 1000; // en secondes
-			this.lastTime = now;
+			//const roomId = this.roomService.findAny();
+			//console.log('game update: ');
+			for (const room of this.roomService.findAll()) {
+			//if (socket.data.roomId) {
+				//console.log('success - ', room.id);
+				const now = Date.now();
+				const deltaTime = (now - this.lastTime) / 1000; // en secondes
+				this.lastTime = now;
 
-			if (!this.gameState.gameOver) {
-				update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime);
+				this.server.to(room.id).emit('message', {
+					type: 'notification',
+					payload: {
+						title: 'test',
+						text: `You definitely belong to this room: ${room.id}`
+					}
+				});
+
+				if (!this.gameState.gameOver) {
+					update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime);
+				}
+				this.server.to(room.id).emit('gameState', {
+					ball: this.ball,
+					leftPaddle: this.leftPaddle,
+					rightPaddle: this.rightPaddle,
+					score: this.score,
+					gameState: this.gameState
+				});
 			}
-
-			this.server.emit('gameState', {
-				ball: this.ball,
-				leftPaddle: this.leftPaddle,
-				rightPaddle: this.rightPaddle,
-				score: this.score,
-				gameState: this.gameState
-			});
 		}, 1000 / FRAMERATE);
-		setInterval(() => {
-			const roomId = this.roomService.findAny();
-			this.server.to(roomId).emit('message', {
-			type: 'notification',
-			payload: {
-				title: 'test',
-				text: 'You belong to this room'
-		}});
-		}, 2000);
     }
 }
