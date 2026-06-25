@@ -28,7 +28,8 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      await login(username);
+      const res = await login(username);
+	  console.log(res.message);
     } catch (e) {
       setError('Connexion échouée, réessaie !');
     }

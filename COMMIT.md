@@ -1,5 +1,16 @@
 ### Commit extension for more description after each commit
 
+25.6.26 21h52
+# PERFECT ROOMS
+Includes:
+Fully operational basic rooms with multiple games possible (can only join the first room for now, fix soon). Gamemode is buggy when multiple users are expected but game is fluid and inputs are received correctly.
+Next Step:
+- Fix gamemode bug
+- Easier room joining
+- fix socket room blocked on first room created
+- "multiplayer" gamemode implementation
+- user interface personnalisation (which palette to control)
+
 25.6.26 14h26
 # Merge Qualitiy of life + (GameGateway room handling + Room class + Group class)
 Includes:

@@ -27,6 +27,18 @@ export class Room {
     //public player1Id: number | null = null;
     //public player2Id: number | null = null;*/
 
+	public ball: Ball = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2, vx: 3, vy: 2, speed: BALL_SPEED };
+    public leftPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+    public rightPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+    public score: Score = { leftPlayer: 0, rightPlayer: 0 };
+    public keys: Keys = { w: false, s: false, up: false, down: false };
+    public gameState: GameState = { gameOver: false, paused: false };
+	public gameMode: string = "";
+    public lastTime: number = Date.now();
+    public gameInterval: any = null; // ← nouveau
+	public resetPending: boolean = false;
+	public endGame: boolean = false;
+
 	private players: Group = new Group(2);
 	private spectators: Group = new Group(null);
 	public readonly id = this.players.id;

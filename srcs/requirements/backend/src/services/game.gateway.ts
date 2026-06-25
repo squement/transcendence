@@ -1,5 +1,7 @@
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, ConnectedSocket } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../auth/auth.guard';
 import { RoomService } from '../room/room.service'
 import { update } from '../game/game_update';
 import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
@@ -12,18 +14,6 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED, FRAMERATE, SCOR
 export class GameGateway {
     @WebSocketServer()
     server!: Server;
-
-    private ball: Ball = { x: CANVAS_WIDTH / 2, y: CANVAS_HEIGHT / 2, vx: 3, vy: 2, speed: BALL_SPEED };
-    private leftPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-    private rightPaddle: Paddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-    private score: Score = { leftPlayer: 0, rightPlayer: 0 };
-    private keys: Keys = { w: false, s: false, up: false, down: false };
-    private gameState: GameState = { gameOver: false, paused: false };
-	private gameMode: string = "";
-    private lastTime: number = Date.now();
-    private gameInterval: any = null; // ← nouveau
-	private resetPending: boolean = false;
-	private endGame: boolean = false;
 
     constructor(public roomService: RoomService) {
         console.log('GameGateway created');
@@ -38,131 +28,143 @@ export class GameGateway {
 		console.log('attempts to join ', roomId);
 		socket.data.roomId = roomId;
 		socket.join(roomId);
-		//YAYY
+		this.server.to(socket.data.roomId).emit('message', {
+			type: 'notification',
+			payload: {
+				title: 'test',
+				text: `You definitely belong to this room: ${socket.data.roomId}`
+			}
+		});
 	}
 	@SubscribeMessage("leaveRoom")
 	leaveRoom(
-		@ConnectedSocket() socket: any,
-		//@MessageBody() roomId: string,
+		@ConnectedSocket() socket: any
 	) {
-		//const roomId = this.roomService.findAny();
 		if (socket.data.roomId)
 			socket.leave(socket.data.roomId);
 	}
 
     @SubscribeMessage('inputs')
-    handleInputs(@MessageBody() data: { keys: Keys }) {
-        this.keys = data.keys;
+    handleInputs(
+		@MessageBody() data: { 
+			id: string,
+			keys: Keys },
+		@ConnectedSocket() socket: any) {
+		if (!socket.data.roomId) return ;
+		const room = this.roomService.findOne(socket.data.roomId);
+		if (room === undefined) return ;
+		/*if (room.gameMode === 'local') {
+			console.log('local settings detected');
+			// local means both ws and ud come from the same user and control the right player
+			room.keys = data.keys;
+			return ;
+		}*/
+		console.log('non local settings detected');
+		const players = room.getPlayers();
+		if (players[0] === data.id) {
+			room.keys.w = data.keys.w || data.keys.up;
+			room.keys.s = data.keys.s || data.keys.down;
+		}
+		if (players[1] === data.id) {
+			room.keys.up = data.keys.w || data.keys.up;
+			room.keys.down = data.keys.s || data.keys.down;
+		}
     }
 
 	@SubscribeMessage('pause')
-	handlePause() {
-		this.gameState.paused = !this.gameState.paused;
+	handlePause(
+		@ConnectedSocket() socket: any) {
+		if (!socket.data.roomId) return ;
+		const room = this.roomService.findOne(socket.data.roomId);
+		if (room === undefined) return ;
+		room.gameState.paused = !room.gameState.paused;
 	}
 
 	@SubscribeMessage('endGame')
-	handleEndGame() {
-		this.endGame = true;
+	handleEndGame(
+		@ConnectedSocket() socket: any) {
+		if (!socket.data.roomId) return ;
+		const room = this.roomService.findOne(socket.data.roomId);
+		if (room === undefined) return ;
+		room.endGame = true;
 	}
 
-    @SubscribeMessage('startGame') // ← nouveau
+    @SubscribeMessage('startGame')
     handleStartGame(
 		@ConnectedSocket() socket: any,
 		@MessageBody() data: { mode: string }) {
-        if (this.gameInterval) return; // déjà lancé
+		if (!socket.data.roomId) return ;
+		this.server.to(socket.data.roomId).emit('message', {
+			type: 'notification',
+			payload: {
+				title: 'test',
+				text: `You definitely belong to this room: ${socket.data.roomId}`
+			}
+		});
+		const room = this.roomService.findOne(socket.data.roomId);
+		if (room === undefined) return ;
+        if (room.gameInterval) return; // déjà lancé
 
-		this.gameMode = data.mode;
-		this.ball = { 
+		room.gameMode = data.mode;
+		room.ball = { 
 			x: CANVAS_WIDTH / 2, 
 			y: CANVAS_HEIGHT / 2, 
 			vx: Math.random() > 0.5 ? 3 : -3,
 			vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
 			speed: BALL_SPEED 
 		};
-		this.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-		this.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-		this.score = { leftPlayer: 0, rightPlayer: 0 };
-		this.keys = { w: false, s: false, up: false, down: false };
-		this.gameState = { gameOver: false, paused: false };
-		this.resetPending = false;
-		this.endGame = false;
-		this.lastTime = Date.now();
+		room.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+		room.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+		room.score = { leftPlayer: 0, rightPlayer: 0 };
+		room.keys = { w: false, s: false, up: false, down: false };
+		room.gameState = { gameOver: false, paused: false };
+		room.resetPending = false;
+		room.endGame = false;
+		room.lastTime = Date.now();
 
-        this.gameInterval = setInterval(() => {
+        room.gameInterval = setInterval(() => {
 			//if (!socket.data.roomId) return ;
 			const now = Date.now();
-			const deltaTime = (now - this.lastTime) / 1000;
-			this.lastTime = now;
+			const deltaTime = (now - room.lastTime) / 1000;
+			room.lastTime = now;
 
-			if (!this.gameState.gameOver && !this.gameState.paused) {
-				update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime, this.gameMode);
+			if (!room.gameState.gameOver && !room.gameState.paused) {
+				update(room.ball, room.leftPaddle, room.rightPaddle, room.gameState, room.score, room.keys, deltaTime, room.gameMode);
 			}
-			else if (this.gameState.gameOver && !this.gameState.paused) {
-				if (!this.resetPending) {
-					this.resetPending = true;
+			else if (room.gameState.gameOver && !room.gameState.paused) {
+				if (!room.resetPending) {
+					room.resetPending = true;
 					setTimeout(() => {
-						this.ball = { 
+						room.ball = { 
 							x: CANVAS_WIDTH / 2, 
 							y: CANVAS_HEIGHT / 2, 
 							vx: Math.random() > 0.5 ? 3 : -3,
 							vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
 							speed: BALL_SPEED 
 						};
-						this.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-						this.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
-						this.gameState.gameOver = false;
-						this.resetPending = false;
+						room.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+						room.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
+						room.gameState.gameOver = false;
+						room.resetPending = false;
 					}, 2000);
 				}
 			}
 					
 			// vérification après update, pas dans un else
-			if ((this.score.leftPlayer >= SCORE_TO_WIN || this.score.rightPlayer >= SCORE_TO_WIN) || (this.endGame && this.gameMode != "online")) {
-				this.server.to(socket.data.roomId).emit('gameOver', { score: this.score });
-				clearInterval(this.gameInterval);
-				this.gameInterval = null;
+			if ((room.score.leftPlayer >= SCORE_TO_WIN || room.score.rightPlayer >= SCORE_TO_WIN) || (room.endGame && room.gameMode != "online")) {
+				this.server.to(socket.data.roomId).emit('gameOver', { score: room.score });
+				clearInterval(room.gameInterval);
+				room.gameInterval = null;
 				return;
 			}
 
 			this.server.to(socket.data.roomId).emit('gameState', {
-				ball: this.ball,
-				leftPaddle: this.leftPaddle,
-				rightPaddle: this.rightPaddle,
-				score: this.score,
-				gameState: this.gameState
+				ball: room.ball,
+				leftPaddle: room.leftPaddle,
+				rightPaddle: room.rightPaddle,
+				score: room.score,
+				gameState: room.gameState
 			});
 		}, 1000 / FRAMERATE);
-	/*
-
-    // boucle de jeu
-    afterInit() {
-        setInterval(() => {
-			//const roomId = this.roomService.findAny();
-			//console.log('game update: ');
-			for (const room of this.roomService.findAll()) {
-			//if (socket.data.roomId) {
-				//console.log('success - ', room.id);
-				const now = Date.now();
-				const deltaTime = (now - this.lastTime) / 1000; // en secondes
-				this.lastTime = now;
-
-				this.server.to(room.id).emit('message', {
-					type: 'notification',
-					payload: {
-						title: 'test',
-						text: `You definitely belong to this room: ${room.id}`
-					}
-				});
-
-				if (!this.gameState.gameOver) {
-					update(this.ball, this.leftPaddle, this.rightPaddle, this.gameState, this.score, this.keys, deltaTime);
-				}
-				this.server.to(room.id).emit('gameState', {
-					ball: this.ball,
-					leftPaddle: this.leftPaddle,
-					rightPaddle: this.rightPaddle,
-					score: this.score,
-					gameState: this.gameState
-				});*/
     }
 }

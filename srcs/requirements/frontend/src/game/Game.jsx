@@ -67,7 +67,9 @@ function Game() {
 
 		// envoyer les inputs au backend 60fps
 		const inputInterval = setInterval(() => {
-			socket.emit('inputs', { keys: keysBE.current });
+			socket.emit('inputs', {
+				id: user.id,
+				keys: keysBE.current });
 		}, 1000 / FRAMERATE);
 
 		// recevoir l'état du jeu et dessiner
