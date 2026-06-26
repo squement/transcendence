@@ -17,6 +17,7 @@ function Game() {
 	// const [gameStarted, setGameStarted] = useState(false);
 	// const socket = useRef(null);
 	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
+	//const [gameStarted, setGameStarted] = useState(false);
 	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
 	const [isPaused, setIsPaused] = useState(false);
 	const isPausedRef = useRef(false);
@@ -111,9 +112,16 @@ function Game() {
 		setGameStarted(true);
 	};
 
+	function handleEnd() {
+		sessionStorage.removeItem('gameStarted');
+		setGameStarted(false);
+		socket.emit('endGame')
+	}
+
 	const handlePause = () => { socket.emit('pause'); }
 	return (
 	<>
+		<button onClick={onReset}>reset</button>
 		{!gameStarted ? (
 			<div>
 				<table>
@@ -131,7 +139,7 @@ function Game() {
 						<button onClick={handlePause}>
 							{isPaused == true ? "Resume" : "Pause"}
 						</button>
-						<button onClick={() => socket.emit('endGame')}>End Game</button>
+						<button onClick={() => handleEnd()}>End Game</button>
 					</div>
 				) : (
 					null

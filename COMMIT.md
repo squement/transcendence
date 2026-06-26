@@ -5,6 +5,7 @@
 Includes:
 Fully operational basic rooms joined through an interface with multiple games possible.
 Gamemode is buggy when multiple users are expected but game is fluid and inputs are received correctly.
+The gameend bug is fixed.
 Next Step:
 - Fix gamemode bug
 - "multiplayer" gamemode implementation
