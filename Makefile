@@ -25,8 +25,10 @@ log:
 	$(DC) logs frontend
 
 fclean: cdown
-	docker volume rm -f srcs_FE_app
-	docker system prune -a --volumes -f
+	sudo docker volume rm -f transcendence_DB_data
+	sudo docker volume rm -f transcendence_BE_app
+	sudo docker volume rm -f transcendence_FE_app
+	sudo docker system prune -a --volumes -f
 
 # sclean: fclean
 #	sudo -k rm -rf $(PATH_DATA)/*
