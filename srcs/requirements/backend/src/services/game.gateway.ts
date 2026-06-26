@@ -19,13 +19,50 @@ export class GameGateway {
         console.log('GameGateway created');
     }
 
+	@SubscribeMessage("getRoom")
+	getRoom() {
+		this.server.emit('list', {
+			type: 'rooms',
+			payload: {
+				array: this.roomService.findAll()
+			}
+		});
+	}
+
+	@SubscribeMessage("createRoom")
+	createRoom(
+		@ConnectedSocket() socket: any,
+		@MessageBody() data: {
+			userId: string
+		}
+	) {
+		console.log(data.userId, ' attempts to create room');
+		if (!data.userId) return ;
+		const roomId = this.roomService.new(data.userId)?.id;
+		socket.data.roomId = roomId;
+		socket.join(roomId);
+		this.server.to(socket.data.roomId).emit('message', {
+			type: 'notification',
+			payload: {
+				title: 'test',
+				text: `You definitely belong to this room: ${socket.data.roomId}`
+			}
+		});
+	}
+
 	@SubscribeMessage("joinRoom")
 	joinRoom(
 		@ConnectedSocket() socket: any,
-		//@MessageBody() roomId: string,
+		@MessageBody() data: {
+			userId: string
+			roomId: string,
+		}
 	) {
-		const roomId = this.roomService.findAny();
-		console.log('attempts to join ', roomId);
+		const roomId = data.roomId;
+		//if (!roomId) roomId = this.roomService.findAny();
+		console.log(data.userId, ' attempts to join ', roomId);
+		if (!roomId) return ;
+		this.roomService.join(roomId, data.userId);
 		socket.data.roomId = roomId;
 		socket.join(roomId);
 		this.server.to(socket.data.roomId).emit('message', {
@@ -38,10 +75,27 @@ export class GameGateway {
 	}
 	@SubscribeMessage("leaveRoom")
 	leaveRoom(
-		@ConnectedSocket() socket: any
+		@ConnectedSocket() socket: any,
+		@MessageBody() data: {
+			userId: string
+		}
 	) {
-		if (socket.data.roomId)
-			socket.leave(socket.data.roomId);
+		console.log(data.userId, ' attempts to leave ', socket.data.roomId);
+		if (!socket.data.roomId) return ;
+		const roomId = socket.data.roomId;
+		this.server.to(roomId).emit('message', {
+			type: 'notification',
+			payload: {
+				title: 'test',
+				text: 'you don\'t belong'
+			}
+		});
+		socket.leave(roomId);
+		socket.data.roomId = null;
+		console.log(data.userId, ' left socket room ', socket.data.roomId);
+		if (!data.userId) return ;
+		this.roomService.leave(roomId, data.userId);
+		console.log(data.userId, ' left room ', socket.data.roomId);
 	}
 
     @SubscribeMessage('inputs')

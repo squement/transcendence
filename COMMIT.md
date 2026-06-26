@@ -3,11 +3,10 @@
 25.6.26 21h52
 # PERFECT ROOMS
 Includes:
-Fully operational basic rooms with multiple games possible (can only join the first room for now, fix soon). Gamemode is buggy when multiple users are expected but game is fluid and inputs are received correctly.
+Fully operational basic rooms joined through an interface with multiple games possible.
+Gamemode is buggy when multiple users are expected but game is fluid and inputs are received correctly.
 Next Step:
 - Fix gamemode bug
-- Easier room joining
-- fix socket room blocked on first room created
 - "multiplayer" gamemode implementation
 - user interface personnalisation (which palette to control)
 
