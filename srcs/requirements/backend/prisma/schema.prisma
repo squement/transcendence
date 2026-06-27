@@ -22,6 +22,19 @@ model User {
   password    String
   gamesPlayed Int      @default(0)
   gamesWon    Int      @default(0)
+  sentFriendships     Friendship[] @relation("FriendshipSender")
+  receivedFriendships Friendship[] @relation("FriendshipReceiver")
+}
+
+model Friendship {
+  id         Int    @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  sender     User   @relation("FriendshipSender", fields: [senderId], references: [id])
+  receiver   User   @relation("FriendshipReceiver", fields: [receiverId], references: [id])
+  status     String @default("pending")
+
+  @@unique([senderId, receiverId])
 }
 
 model TestConfig {

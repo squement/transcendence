@@ -37,14 +37,7 @@ export class AuthService {
 	}
 
 	async register(username: string, email: string, password: string, res: Response) {
-		const user = await this.dbUser.create(username, email, password);
-
-		const token = this.jwtService.sign({ id: user.id.toString() });
-		res.cookie('token', token, {
-			httpOnly: true,
-			sameSite: 'strict',
-			maxAge: 7 * 24 * 60 * 60 * 1000,
-		});
-		return { message: "New account created!", id: user.id};
+		await this.dbUser.create(username, email, password);
+		return this.login(username, password, res);
 	}
 }
