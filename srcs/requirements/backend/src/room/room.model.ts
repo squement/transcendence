@@ -50,8 +50,14 @@ export class Room {
 		this.players.addPlayers([ host ]);
 	}
 
+	getMaxPlayers() : number {
+		return this.players.player_max;
+	}
 	getPlayers() {
 		return this.players.getPlayers();
+	}
+	getSpectators() {
+		return this.spectators.getPlayers();
 	}
 	addPlayers(players: string[]) {
 		this.spectators.addPlayers(

@@ -8,7 +8,7 @@ import { socket } from '../backend_communication/socket.js'
 // GamePage —> wraps Game component in a full page
 function GamePage()
 {
-	const { rooms, roomId, onRefresh, onCreate, onJoin, onLeave } = useRoom();
+	const { rooms, roomId, roomMsg, onRefresh, onCreate, onJoin, onLeave } = useRoom();
 	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
 
 	const handleMode = (mode) => {
@@ -43,6 +43,7 @@ function GamePage()
 				<div>
 					{!roomId ? (
 						<div>
+							<button onClick={() => setGameMode(null)}>Game Mode</button>
 							<button onClick={() => onCreate()}>Create</button>
 							{rooms && rooms.map(room => (
 								<div>
@@ -57,8 +58,9 @@ function GamePage()
 						<div>
 							<button onClick={() => onLeave()}>Leave</button>
 							<div>
-								<Game gameMode={gameMode} onGameOver={() => setGameMode(null)} />
+								<Game gameMode={gameMode} onGameOver={() => onLeave()} />
 							</div>
+							<p>{roomMsg}</p>
 						</div>
 					)}
 				</div>

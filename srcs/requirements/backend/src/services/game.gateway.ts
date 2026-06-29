@@ -45,7 +45,8 @@ export class GameGateway {
 			type: 'notification',
 			payload: {
 				title: 'test',
-				text: `You definitely belong to this room: ${socket.data.roomId}`
+				text: `1/2: ${socket.data.roomId}`,
+				roomId: roomId
 			}
 		});
 	}
@@ -62,14 +63,17 @@ export class GameGateway {
 		//if (!roomId) roomId = this.roomService.findAny();
 		console.log(data.userId, ' attempts to join ', roomId);
 		if (!roomId) return ;
-		this.roomService.join(roomId, data.userId);
+		const room = this.roomService.join(roomId, data.userId);
+		if (room === undefined) return ;
+		const max = room.getMaxPlayers();
 		socket.data.roomId = roomId;
 		socket.join(roomId);
 		this.server.to(socket.data.roomId).emit('message', {
 			type: 'notification',
 			payload: {
 				title: 'test',
-				text: `You definitely belong to this room: ${socket.data.roomId}`
+				text: `${room.getPlayers().length}/${(max < 0) ? '?' : max}: ${socket.data.roomId}`,
+				roomId: roomId
 			}
 		});
 	}
@@ -83,13 +87,17 @@ export class GameGateway {
 		console.log(data.userId, ' attempts to leave ', socket.data.roomId);
 		if (!socket.data.roomId) return ;
 		const roomId = socket.data.roomId;
-		this.server.to(roomId).emit('message', {
-			type: 'notification',
-			payload: {
-				title: 'test',
-				text: 'you don\'t belong'
-			}
-		});
+		const room = this.roomService.findOne(roomId);
+		if (room) {
+			this.server.to(socket.data.roomId).emit('message', {
+				type: 'notification',
+				payload: {
+					title: 'test',
+					text: `${room.getPlayers.length - 1}/${room.getMaxPlayers}: ${socket.data.roomId}`,
+					roomId: roomId
+				}
+			});
+		}
 		socket.leave(roomId);
 		socket.data.roomId = null;
 		console.log(data.userId, ' left socket room ', socket.data.roomId);
@@ -148,13 +156,13 @@ export class GameGateway {
 		@ConnectedSocket() socket: any,
 		@MessageBody() data: { mode: string }) {
 		if (!socket.data.roomId) return ;
-		this.server.to(socket.data.roomId).emit('message', {
+		/*this.server.to(socket.data.roomId).emit('message', {
 			type: 'notification',
 			payload: {
 				title: 'test',
 				text: `You definitely belong to this room: ${socket.data.roomId}`
 			}
-		});
+		});*/
 		const room = this.roomService.findOne(socket.data.roomId);
 		if (room === undefined) return ;
         if (room.gameInterval) return; // déjà lancé

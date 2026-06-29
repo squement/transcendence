@@ -5,6 +5,7 @@ import { useAuth } from '../AuthContext.jsx'
 export function useRoom() {
     const [rooms, setRooms] = useState([]);
     const [roomId, setRoomId] = useState(null);
+	const [roomMsg, setRoomMsg] = useState(null);
     const { user } = useAuth();
 
     // écoute des événements socket liés aux rooms
@@ -22,7 +23,9 @@ export function useRoom() {
         // recevoir les notifications de room (création, join, leave)
         socket.on('message', (msg) => {
             if (msg.type === 'notification') {
+				if (msg.payload.roomId) setRoomId(msg.payload.roomId);
                 console.log('room notification:', msg.payload.text);
+				setRoomMsg(msg.payload.text);
             }
         });
 
@@ -50,7 +53,7 @@ export function useRoom() {
         if (!id) return;
         console.log(`emitting joinRoom: ${id}`);
         socket.emit('joinRoom', { userId: user.id, roomId: id });
-        setRoomId(id); // on stocke le roomId localement
+        //setRoomId(id); // on stocke le roomId localement
     };
 
     const onLeave = () => {
@@ -59,5 +62,5 @@ export function useRoom() {
         setRoomId(null); // on remet roomId à null
     };
 
-    return { rooms, roomId, onRefresh, onCreate, onJoin, onLeave };
+    return { rooms, roomId, roomMsg, onRefresh, onCreate, onJoin, onLeave };
 }
