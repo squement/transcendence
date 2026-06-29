@@ -5,7 +5,7 @@ import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED, FRAMERATE } fro
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
-// import gameMode from '../pages/GamePage.jsx'
+// import gameMode from '../pages/GameMenu.jsx'
 
 function Game({ gameMode, onGameOver }) {
 	const canvasRef = useRef(null);

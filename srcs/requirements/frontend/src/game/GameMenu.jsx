@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Game from '../game/Game.jsx'
+import Game from './Game.jsx'
 import { useRoom } from '../room/useRoom.js'
 import '../styles/pages.css'
 import { socket } from '../backend_communication/socket.js'
 
-// GamePage —> wraps Game component in a full page
-function GamePage()
+// GameMenu —> wraps Game component in a full page
+function GameMenu()
 {
 	const { rooms, roomId, roomMsg, onRefresh, onCreate, onJoin, onLeave } = useRoom();
 	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
@@ -70,4 +70,4 @@ function GamePage()
 	);
 }
 
-export default GamePage;
+export default GameMenu;
