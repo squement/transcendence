@@ -2,7 +2,8 @@ import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, Conne
 import { Server } from 'socket.io';
 import { Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
-import { RoomService } from '../room/room.service'
+import { RoomService } from '../room/room.service';
+import { dbUserService } from '../dbUser/dbUser.service';
 import { update } from '../game/game_update';
 import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED, FRAMERATE, SCORE_TO_WIN } from '../game/game_config';
@@ -15,7 +16,10 @@ export class GameGateway {
     @WebSocketServer()
     server!: Server;
 
-    constructor(public roomService: RoomService) {
+    constructor(
+        public roomService: RoomService,
+        public dbUser: dbUserService,
+    ) {
         console.log('GameGateway created');
     }
 
@@ -151,6 +155,24 @@ export class GameGateway {
 		room.endGame = true;
 	}
 
+	@SubscribeMessage('chatMessage')
+	handleChatMessage(
+		@ConnectedSocket() socket: any,
+		@MessageBody() data: { userId: string; message: string }) {
+		if (!socket.data.roomId) return ;
+		const message = data.message?.trim();
+		if (!message) return ;
+		const now = Date.now();
+		if (socket.data.lastChat && now - socket.data.lastChat < 500) return ;
+		socket.data.lastChat = now;
+		this.server.to(socket.data.roomId).emit('chatMessage', {
+			userId: data.userId,
+			message,
+			timestamp: now,
+			roomId: socket.data.roomId,
+		});
+	}
+
     @SubscribeMessage('startGame')
     handleStartGame(
 		@ConnectedSocket() socket: any,
@@ -182,10 +204,12 @@ export class GameGateway {
 		room.gameState = { gameOver: false, paused: false };
 		room.resetPending = false;
 		room.endGame = false;
+		room.gameEnded = false;
 		room.lastTime = Date.now();
 
+		const roomId = socket.data.roomId;
+
         room.gameInterval = setInterval(() => {
-			//if (!socket.data.roomId) return ;
 			const now = Date.now();
 			const deltaTime = (now - room.lastTime) / 1000;
 			room.lastTime = now;
@@ -197,12 +221,12 @@ export class GameGateway {
 				if (!room.resetPending) {
 					room.resetPending = true;
 					setTimeout(() => {
-						room.ball = { 
-							x: CANVAS_WIDTH / 2, 
-							y: CANVAS_HEIGHT / 2, 
+						room.ball = {
+							x: CANVAS_WIDTH / 2,
+							y: CANVAS_HEIGHT / 2,
 							vx: Math.random() > 0.5 ? 3 : -3,
 							vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
-							speed: BALL_SPEED 
+							speed: BALL_SPEED
 						};
 						room.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
 						room.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
@@ -211,16 +235,32 @@ export class GameGateway {
 					}, 2000);
 				}
 			}
-					
+
 			// vérification après update, pas dans un else
 			if ((room.score.leftPlayer >= SCORE_TO_WIN || room.score.rightPlayer >= SCORE_TO_WIN) || (room.endGame && room.gameMode != "online")) {
-				this.server.to(socket.data.roomId).emit('gameOver', { score: room.score });
+				if (room.gameEnded) return;
+				room.gameEnded = true;
 				clearInterval(room.gameInterval);
 				room.gameInterval = null;
+				this.server.to(roomId).emit('gameOver', { score: room.score });
+				const players = room.getPlayers();
+				const isNaturalWin = room.score.leftPlayer >= SCORE_TO_WIN || room.score.rightPlayer >= SCORE_TO_WIN;
+				players.forEach(id => {
+					const uid = parseInt(id, 10);
+					if (!isNaN(uid)) this.dbUser.playedGame(uid).catch(() => {});
+				});
+				if (isNaturalWin) {
+					const winnerIdx = room.score.leftPlayer >= SCORE_TO_WIN ? 0 : 1;
+					const winnerId = players[winnerIdx] ?? players[0];
+					if (winnerId) {
+						const uid = parseInt(winnerId, 10);
+						if (!isNaN(uid)) this.dbUser.wonGame(uid).catch(() => {});
+					}
+				}
 				return;
 			}
 
-			this.server.to(socket.data.roomId).emit('gameState', {
+			this.server.to(roomId).emit('gameState', {
 				ball: room.ball,
 				leftPaddle: room.leftPaddle,
 				rightPaddle: room.rightPaddle,

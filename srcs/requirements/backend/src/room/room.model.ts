@@ -38,6 +38,7 @@ export class Room {
     public gameInterval: any = null; // ← nouveau
 	public resetPending: boolean = false;
 	public endGame: boolean = false;
+	public gameEnded: boolean = false;
 
 	private players: Group = new Group(2);
 	private spectators: Group = new Group(null);

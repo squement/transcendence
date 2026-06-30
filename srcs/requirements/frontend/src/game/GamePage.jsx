@@ -6,7 +6,7 @@ import GameBleachers from './GameBleachers'
 import GameChat from './GameChat'
 import GameHeader from './GameHeader'
 
-function GamePage({ gameMode, onGameOver }) {
+function GamePage({ gameMode, onGameOver, roomId }) {
 	const [score, setScore] = useState({ leftPlayer: 0, rightPlayer: 0 });
 
 	return (
@@ -16,7 +16,7 @@ function GamePage({ gameMode, onGameOver }) {
 				<Game gameMode={gameMode} onGameOver={onGameOver} onScoreUpdate={setScore} />
 			</div>
 			<GameBleachers />
-			<GameChat />
+			<GameChat roomId={roomId} />
 		</div>
 	)
 }
