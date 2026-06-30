@@ -7,7 +7,7 @@ import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
 // import gameMode from '../pages/GameMenu.jsx'
 
-function Game({ gameMode, onGameOver }) {
+function Game({ gameMode, onGameOver, onScoreUpdate }) {
 	const canvasRef = useRef(null);
 	const leftPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
 	const rightPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
@@ -82,7 +82,8 @@ function Game({ gameMode, onGameOver }) {
 			leftPaddle.current = state.leftPaddle;
 			rightPaddle.current = state.rightPaddle;
 			score.current = state.score;
-
+			onScoreUpdate(state.score);
+			
 			isPausedRef.current = state.gameState.paused;
     		setIsPaused(state.gameState.paused);
 			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current, gameStarted);
@@ -125,16 +126,16 @@ function Game({ gameMode, onGameOver }) {
 		<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
 		{!gameStarted ? (
 			<div>
-				<button onClick={handleStart}>Start the game !</button>
+				<button className="btn-game btn-start" onClick={handleStart}>Start the game !</button>
 			</div>
 		) : (
 			<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 				{gameMode != "online" ? (
 					<div>
-						<button onClick={handlePause}>
+						<button className="btn-game btn-neutral" onClick={handlePause}>
 							{isPaused == true ? "Resume" : "Pause"}
 						</button>
-						<button onClick={() => handleEnd()}>End Game</button>
+						<button className="btn-game btn-neutral" onClick={() => handleEnd()}>End Game</button>
 					</div>
 				) : (
 					null

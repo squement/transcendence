@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Game from './Game.jsx'
+import GamePage from './GamePage.jsx'
 import { useRoom } from '../room/useRoom.js'
 import '../styles/pages.css'
+import '../styles/GamePage.css'
 import { socket } from '../backend_communication/socket.js'
 
 // GameMenu —> wraps Game component in a full page
@@ -34,32 +35,30 @@ function GameMenu()
 			<Link to="/">← Back to menu</Link>
 			{!gameMode ? (
 				<div>
-					<button onClick={() => handleMode("solo_bot")}>PPPB Mode</button>
-					<button onClick={() => handleMode("solo_training")}>Training Mode</button>
-					<button onClick={() => handleMode("local")}>Local Mode</button>
-					<button onClick={() => handleMode("online")}>Online Mode</button>
+					<button className='btn-game' onClick={() => handleMode("solo_bot")}>PPPB Mode</button>
+					<button className='btn-game' onClick={() => handleMode("solo_training")}>Training Mode</button>
+					<button className='btn-game' onClick={() => handleMode("local")}>Local Mode</button>
+					<button className='btn-game' onClick={() => handleMode("online")}>Online Mode</button>
 				</div>
 			) : (
-				<div>
+				<div className='game-wrapper'>
 					{!roomId ? (
 						<div>
-							<button onClick={() => setGameMode(null)}>Game Mode</button>
-							<button onClick={() => onCreate()}>Create</button>
+							<button className='btn-game' onClick={() => setGameMode(null)}>Game Mode</button>
+							<button className='btn-game' onClick={() => onCreate()}>Create</button>
 							{rooms && rooms.map(room => (
 								<div>
-								<button onClick={() => onJoin(room.id)}>
+								<button className='btn-game' onClick={() => onJoin(room.id)}>
 									{room.id} - {room.players[0]}: ?/?
 								</button>
 								</div>
 							))}
-							<button onClick={() => onRefresh()}>Refresh</button>
+							<button className='btn-game' onClick={() => onRefresh()}>Refresh</button>
 						</div>
 					) : (
-						<div>
-							<button onClick={() => onLeave()}>Leave</button>
-							<div>
-								<Game gameMode={gameMode} onGameOver={() => onLeave()} />
-							</div>
+						<div className='game-wrapper'>
+							<button className='btn-game btn-leave' onClick={() => onLeave()}>Leave</button>
+							<GamePage gameMode={gameMode} onGameOver={() => onLeave()} />
 							<p>{roomMsg}</p>
 						</div>
 					)}
