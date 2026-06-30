@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
-import GamePage from './pages/GamePage.jsx'
+import GameMenu from './game/GameMenu.jsx'
 import Profile from './pages/Profile.jsx'
 import Tournament from './pages/Tournament.jsx'
 import Friends from './pages/Friends.jsx'
@@ -19,7 +19,7 @@ function Router()
 				<Route path="/" element={<Home />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/game" element={<GamePage />} />
+				<Route path="/game" element={<GameMenu />} />
 				<Route path="/profile" element={<Profile />} />
 				<Route path="/tournament" element={<Tournament />} />
 				<Route path="/friends" element={<Friends />} />

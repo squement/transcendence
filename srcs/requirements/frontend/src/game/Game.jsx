@@ -5,8 +5,9 @@ import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED, FRAMERATE } fro
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
+// import gameMode from '../pages/GameMenu.jsx'
 
-function Game() {
+function Game({ gameMode, onGameOver }) {
 	const canvasRef = useRef(null);
 	const leftPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
 	const rightPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
@@ -16,10 +17,12 @@ function Game() {
 	const { user } = useAuth();
 	// const [gameStarted, setGameStarted] = useState(false);
 	// const socket = useRef(null);
-	const [gameMode, setGameMode] = useState(sessionStorage.getItem('gameMode') || null);
+	//const [gameStarted, setGameStarted] = useState(false);
 	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
 	const [isPaused, setIsPaused] = useState(false);
 	const isPausedRef = useRef(false);
+
+	console.log('did game started ?? ', gameStarted);
 
 	// écoute du clavier
 	useEffect(() => {
@@ -58,16 +61,19 @@ function Game() {
 
 	// connexion socket + boucle de rendu
 	useEffect(() => {
-		if (!gameStarted) return;
-
+		
 		const canvas = canvasRef.current;
 		const ctx = canvas.getContext("2d");
-
+		
+		render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current, gameStarted);
+		if (!gameStarted) return;
 		socket.emit("startGame", { mode: gameMode });
 
 		// envoyer les inputs au backend 60fps
 		const inputInterval = setInterval(() => {
-			socket.emit('inputs', { keys: keysBE.current });
+			socket.emit('inputs', {
+				id: user.id,
+				keys: keysBE.current });
 		}, 1000 / FRAMERATE);
 
 		// recevoir l'état du jeu et dessiner
@@ -79,7 +85,7 @@ function Game() {
 
 			isPausedRef.current = state.gameState.paused;
     		setIsPaused(state.gameState.paused);
-			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current);
+			render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current, gameStarted);
 		});
 
 		socket.on('gameOver', (data) => {
@@ -87,7 +93,7 @@ function Game() {
 			sessionStorage.removeItem('gameMode');
 			
 			setIsPaused(false);
-			setGameMode(null);
+			onGameOver();
 			setGameStarted(false); // on revient à l'écran du bouton
 			score.current = data.score;
 			score.current.leftPlayer = 0; // on garde le score final
@@ -101,35 +107,34 @@ function Game() {
 		};
 	}, [gameStarted]);
 
-	const handleStart = (mode) => {
-
+	const handleStart = () => {
 		sessionStorage.setItem('gameStarted', 'true');
-		sessionStorage.setItem('gameMode', mode);
-		setGameMode(mode)
 		setGameStarted(true);
 	};
+
+	function handleEnd() {
+		sessionStorage.removeItem('gameStarted');
+		setGameStarted(false);
+		onGameOver();
+		socket.emit('endGame')
+	}
 
 	const handlePause = () => { socket.emit('pause'); }
 	return (
 	<>
+		<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
 		{!gameStarted ? (
 			<div>
-				<table>
-					<tr><button onClick={() => handleStart("solo_bot")}>PPPB Mode</button></tr>
-					<tr><button onClick={() => handleStart("solo_training")}>Training Mode</button></tr>
-					<tr><button onClick={() => handleStart("local")}>Local Mode</button></tr>
-					<tr><button onClick={() => handleStart("online")}>Online Mode</button></tr>
-				</table>
+				<button onClick={handleStart}>Start the game !</button>
 			</div>
 		) : (
 			<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-				<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
 				{gameMode != "online" ? (
 					<div>
 						<button onClick={handlePause}>
 							{isPaused == true ? "Resume" : "Pause"}
 						</button>
-						<button onClick={() => socket.emit('endGame')}>End Game</button>
+						<button onClick={() => handleEnd()}>End Game</button>
 					</div>
 				) : (
 					null

@@ -1,5 +1,26 @@
 ### Commit extension for more description after each commit
 
+26.6.26 20h43
+# (almost) PERFECT GAME ROUTER
+Includes:
+A router for the game, now instead of just launching the game, we have to choose the game mode first, then select a room, and then the game will run.
+Next Step:
+- Finalize the router
+- Fix gamemode bug
+- "multiplayer" gamemode implementation
+- User interface personnalisation (which palette to control)
+
+25.6.26 21h52
+# PERFECT ROOMS
+Includes:
+Fully operational basic rooms joined through an interface with multiple games possible.
+Gamemode is buggy when multiple users are expected but game is fluid and inputs are received correctly.
+The gameEnd bug is fixed.
+Next Step:
+- Fix gamemode bug
+- "multiplayer" gamemode implementation
+- user interface personnalisation (which palette to control)
+
 25.6.26 14h26
 # Merge Qualitiy of life + (GameGateway room handling + Room class + Group class)
 Includes:
