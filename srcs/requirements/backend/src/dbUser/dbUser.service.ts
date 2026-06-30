@@ -1,11 +1,13 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Inject, forwardRef } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
-import { receiveMessageOnPort } from "node:worker_threads";
 import { PrismaService } from "src/prisma/prisma.service";
+import { User } from "src/user/user.model";
+import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class dbUserService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService,
+		@Inject(forwardRef(() => UserService)) private userService: UserService) {}
 
 	// search user
 	async findById(id: number) {
@@ -45,10 +47,13 @@ export class dbUserService {
 	async update(id: number, data: { username?: string, email?: string, password?: string }) {
 		if (data.password)
 			data.password = await bcrypt.hash(data.password, 10);
-		return this.prisma.user.update({ 
+		const update = await this.prisma.user.update({ 
 			where: { id }, 
 			data 
 		})
+		if (update && this.userService.findOne(id))
+			this.userService.updateOne(new User(id, update.username, await this.getFriendsSet(id)));
+		return update;
 	}
 
 	async playedGame(id: number) {
@@ -67,14 +72,48 @@ export class dbUserService {
 
 
 	// friendship <3
-	async getFriends(id: number) {
+	async getFriends(myId: number) { // get friends for the public
 		return this.prisma.user.findUnique({
-			where: { id },
-			include: {
-				sentFriendships: { where: { status: 'accepted' } },
-				receivedFriendships: { where: { status: 'accepted' } }
-			}
-		})
+			where: { id: myId },
+			select: { // go through the user's friendships, and return the getUser() objects,
+				username: true,
+				sentFriendships: {
+					where: { status: 'accepted' },
+					select: {
+						receiver: { select: { username: true, gamesPlayed: true, gamesWon: true } }
+				}},
+				receivedFriendships: {
+					where: { status: 'accepted' },
+					select: {
+						sender: { select: { username: true, gamesPlayed: true, gamesWon: true } }
+			}}}
+		});
+	}
+
+	async getFriendsId(myId: number) { // get friends private (contains friends' Id)
+		return this.prisma.user.findUnique({
+			where: { id: myId },
+			select: { // go through the user's friendships, and return the getUser() objects,
+				username: true,
+				sentFriendships: {
+					where: { status: 'accepted' },
+					select: {
+						receiver: { select: { id: true, username: true, gamesPlayed: true, gamesWon: true } }
+				}},
+				receivedFriendships: {
+					where: { status: 'accepted' },
+					select: {
+						sender: { select: { id:true, username: true, gamesPlayed: true, gamesWon: true } }
+			}}}
+		});
+	}
+
+	async getFriendsSet(id: number) { // returns set of friends' ids
+		const userFriends = await this.getFriendsId(id);
+		return new Set([
+		  ...userFriends?.sentFriendships.map(f => f.receiver.id) ?? [],
+		  ...userFriends?.receivedFriendships.map(f => f.sender.id) ?? []
+		]);
 	}
 
 	async isFriendship(senderId: number, receiverId: number) { // check if this friendship exists
@@ -89,7 +128,7 @@ export class dbUserService {
 		return this.prisma.friendship.update({
 			where: { 
 				senderId_receiverId: { senderId, receiverId },
-				status: { in: ['pending', 'denied'] }
+				status: 'pending'
 			},
 			data: { status: 'denied' }
 		});
@@ -98,13 +137,18 @@ export class dbUserService {
 	async acceptFriendship(senderId: number, receiverId: number) {
 		const friend = await this.isFriendship(senderId, receiverId);
 		if (!friend) return null;
-		return this.prisma.friendship.update({
-			where: { 
+		const acceptance = await this.prisma.friendship.update({
+			where: {
 				senderId_receiverId: { senderId, receiverId },
 				status: { in: ['pending', 'denied'] }
 			},
 			data: { status: 'accepted' }
 		});
+		if (acceptance) {
+			this.userService.findOne(receiverId)?.friends.add(senderId);
+			this.userService.findOne(senderId)?.friends.add(receiverId);
+		}
+		return acceptance;
 	}
 
 	async deleteFriendship(senderId: number, receiverId: number) {
@@ -113,15 +157,16 @@ export class dbUserService {
 		if (!friend) return null;
 		senderId = friend.senderId;
 		receiverId = friend.receiverId;
-		return this.prisma.friendship.delete({
+		const deletion = await this.prisma.friendship.delete({
 			where: { senderId_receiverId: { senderId, receiverId } }
 		});
+		if (deletion) {
+			this.userService.findOne(receiverId)?.friends.delete(senderId);
+			this.userService.findOne(senderId)?.friends.delete(receiverId);
+		}
 	}
 
 	async sendFriendship(senderId: number, receiverId: number) {
-		const friend = this.isFriendship(senderId, receiverId);
-		if (!friend) return null;
-
 		if (senderId == receiverId)
 			return (console.log('this guy thinks hes funny smh'), null);
 

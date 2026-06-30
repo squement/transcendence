@@ -22,7 +22,7 @@ export class UserController {
 	res.sendFile(filePath);
 	}
 	@Get('/add/:name')
-	add(@Param('name') name: string): User {
+	async add(@Param('name') name: string): Promise<User | null> {
 		return this.userService.add(name);
 	}
 	@Get(['/rm/:id', '/remove/:id'])
@@ -32,10 +32,10 @@ export class UserController {
 	return 'User ' + id + ' was removed';
 	}
 	@Get(['/', '/find/all', '/find'])
-	findAll(): User[] {
-	const user = this.userService.findAll();
-	if (!user) throw new NotFoundException(`Users couldn't be found`);
-	return user;
+	findAll() {
+		const users = this.userService.findAll();
+		if (!users) throw new NotFoundException(`Users couldn't be found`);
+		return [...users.values()];
 	}
 	@Get([':id', '/find/:id'])
 	findOne(@Param('id') id: string): User {

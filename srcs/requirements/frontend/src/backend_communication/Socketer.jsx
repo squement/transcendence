@@ -33,7 +33,7 @@ export default function Broadcast() {
 	   <ul>
 		{users.map(user => (
 		<li key={user.id}>
-			{user.username}: {user.update}
+			{user.username}
 		</li>
 		))}
 	</ul>

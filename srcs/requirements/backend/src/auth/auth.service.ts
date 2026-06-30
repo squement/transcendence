@@ -2,13 +2,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtSecretRequestType, JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { dbUserService } from 'src/dbUser/dbUser.service';
+import { UserService } from 'src/user/user.service';
 import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private jwtService: JwtService,
-		private dbUser: dbUserService
+		private dbUser: dbUserService,
+		private userService: UserService
 	) {}
 
 	async login(identifier: string, password: string, res: Response) {
@@ -28,10 +30,13 @@ export class AuthService {
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 
+		this.userService.add(user.username);
+
 		return { message: "Logged in !!!!", id: user.id };
 	}
 
-	logout(res: Response) {
+	logout(id: number, res: Response) {
+		this.userService.remove(id);
 		res.clearCookie('token');
 		return { message: 'Logged out baby!!!!' };
 	}

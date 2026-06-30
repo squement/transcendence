@@ -24,6 +24,9 @@ re: fclean build up
 log:
 	$(DC) logs frontend
 
+backlog:
+	$(DC) logs backend
+
 fclean: cdown
 	docker volume rm -f srcs_FE_app
 	docker system prune -a --volumes -f
