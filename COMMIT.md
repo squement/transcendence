@@ -1,5 +1,14 @@
 ### Commit extension for more description after each commit
 
+30.6.26 14h39
+# Made the Game Page pretty
+Includes: 
+A ton of html/css for the game page, renamed the old file GamePage.jsx into GameMenu.jsx and added a new file named GamePage.jsx
+Next Step:
+- Merge everything
+- Add Game rules
+- Add html/css for the Title screen and Profile screen
+
 26.6.26 20h43
 # (almost) PERFECT GAME ROUTER
 Includes:

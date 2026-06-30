@@ -15,6 +15,19 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
+  --color-bg: #6ca4dc;
+  --color-bg-dark: #1b3650;
+  --color-header: #8EB9E3;
+  --color-lighting: #C9E0F7;
+  --color-bleachers: #5d007e;
+  --color-bleachers-dark: #330245;
+  --color-seats: #ebcb00;
+  --color-chat: #5a4550;
+  --color-p1: #42861d;
+  --color-p1-dark: #2d5518;
+  --color-p2: #cf1513;
+  --color-p2-dark: #65100f;
+
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
@@ -27,6 +40,7 @@
 
   @media (max-width: 1024px) {
     font-size: 16px;
+  /* @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap'); */
   }
 }
 
@@ -52,6 +66,8 @@
 
 body {
   margin: 0;
+  display: flex;
+  justify-content: center;
 }
 
 #root {
@@ -64,6 +80,7 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  align-items: center;
 }
 
 h1,
@@ -90,6 +107,9 @@ h2 {
   @media (max-width: 1024px) {
     font-size: 20px;
   }
+}
+h3 {
+	font-family: 'Permanent Marker', cursive;
 }
 p {
   margin: 0;
