@@ -7,7 +7,7 @@ import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
 // import gameMode from '../pages/GameMenu.jsx'
 
-function Game({ gameMode, onGameOver, onScoreUpdate }) {
+function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
 	const canvasRef = useRef(null);
 	const leftPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
 	const rightPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
@@ -23,6 +23,7 @@ function Game({ gameMode, onGameOver, onScoreUpdate }) {
 	const isPausedRef = useRef(false);
 
 	console.log('did game started ?? ', gameStarted);
+	console.log('endless mode ?? ', settings.endlessMode);
 
 	// écoute du clavier
 	useEffect(() => {
@@ -67,7 +68,7 @@ function Game({ gameMode, onGameOver, onScoreUpdate }) {
 		
 		render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current, gameStarted);
 		if (!gameStarted) return;
-		socket.emit("startGame", { mode: gameMode });
+		socket.emit("startGame", { mode: gameMode, settings: settings });
 
 		// envoyer les inputs au backend 60fps
 		const inputInterval = setInterval(() => {
@@ -93,6 +94,7 @@ function Game({ gameMode, onGameOver, onScoreUpdate }) {
 			sessionStorage.removeItem('gameStarted');
 			sessionStorage.removeItem('gameMode');
 			
+			console.log('game is over');
 			setIsPaused(false);
 			onGameOver();
 			setGameStarted(false); // on revient à l'écran du bouton
@@ -117,7 +119,8 @@ function Game({ gameMode, onGameOver, onScoreUpdate }) {
 		sessionStorage.removeItem('gameStarted');
 		setGameStarted(false);
 		onGameOver();
-		socket.emit('endGame')
+		socket.emit('endGame');
+		console.log('End Game button was pressed');
 	}
 
 	const handlePause = () => { socket.emit('pause'); }

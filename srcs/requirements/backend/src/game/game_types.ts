@@ -26,3 +26,12 @@ export interface GameState {
 	gameOver: boolean;
 	paused: boolean;
 }
+
+export interface Settings {
+	scoreToWin: number;
+	ballSpeed: number;
+	maxBallSpeed: number;
+	paddleSpeed: number;
+	endlessMode: boolean;
+	set: boolean;
+}

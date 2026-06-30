@@ -1,5 +1,5 @@
 import { Group } from '../group/group.model';
-import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
+import { Ball, Paddle, Score, Keys, GameState, Settings } from '../game/game_types';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED } from '../game/game_config';
 /*
 // Group : gere joueurs (host + guest)
@@ -34,6 +34,7 @@ export class Room {
     public keys: Keys = { w: false, s: false, up: false, down: false };
     public gameState: GameState = { gameOver: false, paused: false };
 	public gameMode: string = "";
+	public settings: Settings = { scoreToWin: 10, ballSpeed: 120, maxBallSpeed: 240, paddleSpeed: 480, endlessMode: false, set: false };
     public lastTime: number = Date.now();
     public gameInterval: any = null; // ← nouveau
 	public resetPending: boolean = false;

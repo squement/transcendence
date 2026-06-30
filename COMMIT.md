@@ -1,5 +1,14 @@
 ### Commit extension for more description after each commit
 
+30.6.26 21h23
+# Game Rules added
+Includes:
+A new page to define game rules with some css to make it pretty and a brand new  Endless mode !!!!!
+Next Step:
+- Merge
+- Fix these god damn game rooms im tired pls
+- Add html/css for the Title screen and Profile screen
+
 30.6.26 14h39
 # Made the Game Page pretty
 Includes: 

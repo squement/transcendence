@@ -4,7 +4,7 @@ import { Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { RoomService } from '../room/room.service'
 import { update } from '../game/game_update';
-import { Ball, Paddle, Score, Keys, GameState } from '../game/game_types';
+import { Ball, Paddle, Score, Keys, GameState, Settings } from '../game/game_types';
 import { CANVAS_WIDTH, CANVAS_HEIGHT, PADDLE_HEIGHT, BALL_SPEED, FRAMERATE, SCORE_TO_WIN } from '../game/game_config';
 
 @WebSocketGateway({ 
@@ -154,7 +154,7 @@ export class GameGateway {
     @SubscribeMessage('startGame')
     handleStartGame(
 		@ConnectedSocket() socket: any,
-		@MessageBody() data: { mode: string }) {
+		@MessageBody() data: { mode: string, settings: Settings }) {
 		if (!socket.data.roomId) return ;
 		/*this.server.to(socket.data.roomId).emit('message', {
 			type: 'notification',
@@ -167,13 +167,14 @@ export class GameGateway {
 		if (room === undefined) return ;
         if (room.gameInterval) return; // déjà lancé
 
+		room.settings = data.settings;
 		room.gameMode = data.mode;
 		room.ball = { 
 			x: CANVAS_WIDTH / 2, 
 			y: CANVAS_HEIGHT / 2, 
 			vx: Math.random() > 0.5 ? 3 : -3,
 			vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
-			speed: BALL_SPEED 
+			speed: data.settings.ballSpeed,
 		};
 		room.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
 		room.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
@@ -191,7 +192,7 @@ export class GameGateway {
 			room.lastTime = now;
 
 			if (!room.gameState.gameOver && !room.gameState.paused) {
-				update(room.ball, room.leftPaddle, room.rightPaddle, room.gameState, room.score, room.keys, deltaTime, room.gameMode);
+				update(room.ball, room.leftPaddle, room.rightPaddle, room.gameState, room.score, room.keys, deltaTime, room.gameMode, room.settings);
 			}
 			else if (room.gameState.gameOver && !room.gameState.paused) {
 				if (!room.resetPending) {
@@ -202,7 +203,7 @@ export class GameGateway {
 							y: CANVAS_HEIGHT / 2, 
 							vx: Math.random() > 0.5 ? 3 : -3,
 							vy: (Math.random() > 0.5 ? 1 : -1) * (Math.floor(Math.random() * 3) + 1),
-							speed: BALL_SPEED 
+							speed: room.settings.ballSpeed 
 						};
 						room.leftPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
 						room.rightPaddle = { y: CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2 };
@@ -213,7 +214,7 @@ export class GameGateway {
 			}
 					
 			// vérification après update, pas dans un else
-			if ((room.score.leftPlayer >= SCORE_TO_WIN || room.score.rightPlayer >= SCORE_TO_WIN) || (room.endGame && room.gameMode != "online")) {
+			if ((!room.settings.endlessMode && (room.score.leftPlayer >= room.settings.scoreToWin || room.score.rightPlayer >= room.settings.scoreToWin)) || (room.endGame && room.gameMode != "online")) {
 				this.server.to(socket.data.roomId).emit('gameOver', { score: room.score });
 				clearInterval(room.gameInterval);
 				room.gameInterval = null;

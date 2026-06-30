@@ -247,3 +247,66 @@
     flex-direction: column;
     align-items: center;
 }
+
+.settings-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.settings-group label {
+    font-family: 'Permanent Marker', cursive;
+    padding: 0.5rem 1rem;
+    border: 3px solid var(--color-bg-dark);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    background-color: var(--color-bg);
+    color: white;
+}
+
+.settings-group input[type="radio"] {
+    display: none;
+}
+
+.settings-group input[type="radio"]:checked + label,
+.settings-group label:has(input[type="radio"]:checked) {
+    background-color: var(--color-bg-dark);
+}
+
+.settings-group input[type="number"] {
+    font-family: 'Permanent Marker', cursive;
+    background-color: var(--color-bg-dark);
+    color: white;
+    border: none;
+    border-radius: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    width: 60px;
+    margin-left: 0.5rem;
+}
+
+.settings-label {
+    font-family: 'Permanent Marker', cursive;
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-value {
+    font-family: 'Permanent Marker', cursive;
+    color: white;
+    margin-left: 0.3rem;
+}
+
+.toggle-yes {
+    color: var(--color-p1);
+}
+
+.toggle-no {
+    color: var(--color-p2);
+}
