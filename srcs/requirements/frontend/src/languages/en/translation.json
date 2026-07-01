@@ -1,0 +1,85 @@
+{
+  "common": {
+    "back": "← Back",
+    "back_home": "← Back to home",
+    "loading": "Loading...",
+    "coming_soon": "Coming soon."
+  },
+  "home": {
+    "title": "Transcendence",
+    "play": "Play",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "tournament": "Tournament",
+    "friends": "Friends",
+    "settings": "Settings",
+    "dev_tools": "Dev Tools"
+  },
+  "login": {
+    "title": "Login",
+    "identifier_label": "Email or username",
+    "password_label": "Password",
+    "submit": "Log in",
+    "no_account": "No account?",
+    "register_link": "Register",
+    "welcome": "Welcome to Pong!",
+    "username_placeholder": "Your username",
+    "logout": "Log out",
+    "login_failed": "Login failed, please try again!"
+  },
+  "register": {
+    "title": "Create account",
+    "username_label": "Username",
+    "email_label": "Email",
+    "password_label": "Password",
+    "submit": "Register",
+    "already_account": "Already have an account?",
+    "login_link": "Log in"
+  },
+  "profile": {
+    "title": "Profile",
+    "placeholder": "Available after login is implemented."
+  },
+  "friends": {
+    "title": "Friends",
+    "placeholder": "Friend list — coming soon."
+  },
+  "settings": {
+    "title": "Settings",
+    "placeholder": "Account settings, coming very soon."
+  },
+  "tournament": {
+    "title": "Tournament",
+    "placeholder": "Tournament, coming soon."
+  },
+  "errors": {
+    "not_found_title": "404",
+    "not_found_message": "Page not found.",
+    "back_home": "← Back to home"
+  },
+  "game": {
+    "mode_pppb": "PPPB Mode",
+    "mode_training": "Training Mode",
+    "mode_local": "Local Mode",
+    "mode_online": "Online Mode",
+    "room_game_mode": "Game Mode",
+    "room_create": "Create",
+    "room_refresh": "Refresh",
+    "room_leave": "Leave",
+    "room_label": "Room #{{index}} — {{count}}/2 players",
+    "start": "Start the game!",
+    "pause": "Pause",
+    "resume": "Resume",
+    "end_game": "End Game",
+    "leave": "Leave"
+  },
+  "chat": {
+    "placeholder": "Message...",
+    "send": "Send"
+  },
+  "notifications": {
+    "room_joined": "You joined the room.",
+    "room_left": "You left the room."
+  }
+}

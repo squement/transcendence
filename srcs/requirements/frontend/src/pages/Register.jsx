@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import '../styles/pages.css'
 
 // Register page :
@@ -8,6 +9,7 @@ import '../styles/pages.css'
 // -> password
 function Register()
 {
+	const { t } = useTranslation();
 	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -31,9 +33,9 @@ function Register()
 
 	return (
 		<div className="page">
-			<h1>Create account</h1>
+			<h1>{t('register.title')}</h1>
 			<form onSubmit={handleSubmit}>
-				<label>Username</label>
+				<label>{t('register.username_label')}</label>
 				<br />
 				<input
 					type="text"
@@ -42,7 +44,7 @@ function Register()
 					required
 				/>
 				<br /><br />
-				<label>Email</label>
+				<label>{t('register.email_label')}</label>
 				<br />
 				<input
 					type="email"
@@ -51,7 +53,7 @@ function Register()
 					required
 				/>
 				<br /><br />
-				<label>Password</label>
+				<label>{t('register.password_label')}</label>
 				<br />
 				<input
 					type="password"
@@ -60,10 +62,10 @@ function Register()
 					required
 				/>
 				<br /><br />
-				<button type="submit" className="btn">Register</button>
+				<button type="submit" className="btn">{t('register.submit')}</button>
 			</form>
-			<p>Already have an account? <Link to="/login">Login</Link></p>
-			<Link to="/">← Back</Link>
+			<p>{t('register.already_account')} <Link to="/login">{t('register.login_link')}</Link></p>
+			<Link to="/">{t('common.back')}</Link>
 		</div>
 	);
 }

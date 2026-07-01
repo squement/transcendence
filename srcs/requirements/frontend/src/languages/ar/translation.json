@@ -1,0 +1,85 @@
+{
+  "common": {
+    "back": "→ رجوع",
+    "back_home": "→ العودة إلى الرئيسية",
+    "loading": "جارٍ التحميل...",
+    "coming_soon": "قريباً."
+  },
+  "home": {
+    "title": "Transcendence",
+    "play": "العب",
+    "login": "تسجيل الدخول",
+    "register": "إنشاء حساب",
+    "profile": "الملف الشخصي",
+    "tournament": "البطولة",
+    "friends": "الأصدقاء",
+    "settings": "الإعدادات",
+    "dev_tools": "أدوات المطور"
+  },
+  "login": {
+    "title": "تسجيل الدخول",
+    "identifier_label": "البريد الإلكتروني أو اسم المستخدم",
+    "password_label": "كلمة المرور",
+    "submit": "تسجيل الدخول",
+    "no_account": "ليس لديك حساب؟",
+    "register_link": "إنشاء حساب",
+    "welcome": "!مرحباً بك في Pong",
+    "username_placeholder": "اسم المستخدم",
+    "logout": "تسجيل الخروج",
+    "login_failed": "!فشل تسجيل الدخول، يرجى المحاولة مرة أخرى"
+  },
+  "register": {
+    "title": "إنشاء حساب",
+    "username_label": "اسم المستخدم",
+    "email_label": "البريد الإلكتروني",
+    "password_label": "كلمة المرور",
+    "submit": "إنشاء حساب",
+    "already_account": "لديك حساب بالفعل؟",
+    "login_link": "تسجيل الدخول"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "placeholder": "متاح بعد تسجيل الدخول."
+  },
+  "friends": {
+    "title": "الأصدقاء",
+    "placeholder": "قائمة الأصدقاء — قريباً."
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "placeholder": "إعدادات الحساب، قريباً."
+  },
+  "tournament": {
+    "title": "البطولة",
+    "placeholder": "البطولة، قريباً."
+  },
+  "errors": {
+    "not_found_title": "404",
+    "not_found_message": "الصفحة غير موجودة.",
+    "back_home": "→ العودة إلى الرئيسية"
+  },
+  "game": {
+    "mode_pppb": "وضع PPPB",
+    "mode_training": "وضع التدريب",
+    "mode_local": "الوضع المحلي",
+    "mode_online": "الوضع الإلكتروني",
+    "room_game_mode": "وضع اللعبة",
+    "room_create": "إنشاء",
+    "room_refresh": "تحديث",
+    "room_leave": "مغادرة",
+    "room_label": "غرفة #{{index}} — {{count}}/2 لاعبين",
+    "start": "!ابدأ اللعبة",
+    "pause": "إيقاف مؤقت",
+    "resume": "استئناف",
+    "end_game": "إنهاء اللعبة",
+    "leave": "مغادرة"
+  },
+  "chat": {
+    "placeholder": "رسالة...",
+    "send": "إرسال"
+  },
+  "notifications": {
+    "room_joined": "لقد انضممت إلى الغرفة.",
+    "room_left": "لقد غادرت الغرفة."
+  }
+}
