@@ -3,3 +3,9 @@ secrets/*
 !**/.gitkeep
 MODIFS.md
 recap.txt
+CLAUDE.md
+node_modules/
+memory/
+srcs/docker-compose.override.yml
+.test/
+srcs/requirements/backend/uploads/*

@@ -45,6 +45,7 @@ export type UserMinAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  avatarPath: string | null
   gamesPlayed: number | null
   gamesWon: number | null
 }
@@ -56,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  avatarPath: string | null
   gamesPlayed: number | null
   gamesWon: number | null
 }
@@ -67,6 +69,7 @@ export type UserCountAggregateOutputType = {
   username: number
   email: number
   password: number
+  avatarPath: number
   gamesPlayed: number
   gamesWon: number
   _all: number
@@ -92,6 +95,7 @@ export type UserMinAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  avatarPath?: true
   gamesPlayed?: true
   gamesWon?: true
 }
@@ -103,6 +107,7 @@ export type UserMaxAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  avatarPath?: true
   gamesPlayed?: true
   gamesWon?: true
 }
@@ -114,6 +119,7 @@ export type UserCountAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  avatarPath?: true
   gamesPlayed?: true
   gamesWon?: true
   _all?: true
@@ -212,6 +218,7 @@ export type UserGroupByOutputType = {
   username: string
   email: string
   password: string
+  avatarPath: string | null
   gamesPlayed: number
   gamesWon: number
   _count: UserCountAggregateOutputType | null
@@ -246,6 +253,7 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
+  avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   gamesPlayed?: Prisma.IntFilter<"User"> | number
   gamesWon?: Prisma.IntFilter<"User"> | number
   sentFriendships?: Prisma.FriendshipListRelationFilter
@@ -259,6 +267,7 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  avatarPath?: Prisma.SortOrderInput | Prisma.SortOrder
   gamesPlayed?: Prisma.SortOrder
   gamesWon?: Prisma.SortOrder
   sentFriendships?: Prisma.FriendshipOrderByRelationAggregateInput
@@ -275,6 +284,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   password?: Prisma.StringFilter<"User"> | string
+  avatarPath?: Prisma.StringNullableFilter<"User"> | string | null
   gamesPlayed?: Prisma.IntFilter<"User"> | number
   gamesWon?: Prisma.IntFilter<"User"> | number
   sentFriendships?: Prisma.FriendshipListRelationFilter
@@ -288,6 +298,7 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  avatarPath?: Prisma.SortOrderInput | Prisma.SortOrder
   gamesPlayed?: Prisma.SortOrder
   gamesWon?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -307,6 +318,7 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  avatarPath?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   gamesPlayed?: Prisma.IntWithAggregatesFilter<"User"> | number
   gamesWon?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
@@ -317,6 +329,7 @@ export type UserCreateInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   sentFriendships?: Prisma.FriendshipCreateNestedManyWithoutSenderInput
@@ -330,6 +343,7 @@ export type UserUncheckedCreateInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   sentFriendships?: Prisma.FriendshipUncheckedCreateNestedManyWithoutSenderInput
@@ -342,6 +356,7 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   sentFriendships?: Prisma.FriendshipUpdateManyWithoutSenderNestedInput
@@ -355,6 +370,7 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   sentFriendships?: Prisma.FriendshipUncheckedUpdateManyWithoutSenderNestedInput
@@ -368,6 +384,7 @@ export type UserCreateManyInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
 }
@@ -378,6 +395,7 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -389,6 +407,7 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
 }
@@ -400,6 +419,7 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  avatarPath?: Prisma.SortOrder
   gamesPlayed?: Prisma.SortOrder
   gamesWon?: Prisma.SortOrder
 }
@@ -417,6 +437,7 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  avatarPath?: Prisma.SortOrder
   gamesPlayed?: Prisma.SortOrder
   gamesWon?: Prisma.SortOrder
 }
@@ -428,6 +449,7 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  avatarPath?: Prisma.SortOrder
   gamesPlayed?: Prisma.SortOrder
   gamesWon?: Prisma.SortOrder
 }
@@ -449,6 +471,10 @@ export type DateTimeFieldUpdateOperationsInput = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -493,6 +519,7 @@ export type UserCreateWithoutSentFriendshipsInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   receivedFriendships?: Prisma.FriendshipCreateNestedManyWithoutReceiverInput
@@ -505,6 +532,7 @@ export type UserUncheckedCreateWithoutSentFriendshipsInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   receivedFriendships?: Prisma.FriendshipUncheckedCreateNestedManyWithoutReceiverInput
@@ -521,6 +549,7 @@ export type UserCreateWithoutReceivedFriendshipsInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   sentFriendships?: Prisma.FriendshipCreateNestedManyWithoutSenderInput
@@ -533,6 +562,7 @@ export type UserUncheckedCreateWithoutReceivedFriendshipsInput = {
   username: string
   email: string
   password: string
+  avatarPath?: string | null
   gamesPlayed?: number
   gamesWon?: number
   sentFriendships?: Prisma.FriendshipUncheckedCreateNestedManyWithoutSenderInput
@@ -560,6 +590,7 @@ export type UserUpdateWithoutSentFriendshipsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   receivedFriendships?: Prisma.FriendshipUpdateManyWithoutReceiverNestedInput
@@ -572,6 +603,7 @@ export type UserUncheckedUpdateWithoutSentFriendshipsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   receivedFriendships?: Prisma.FriendshipUncheckedUpdateManyWithoutReceiverNestedInput
@@ -594,6 +626,7 @@ export type UserUpdateWithoutReceivedFriendshipsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   sentFriendships?: Prisma.FriendshipUpdateManyWithoutSenderNestedInput
@@ -606,6 +639,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendshipsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarPath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gamesPlayed?: Prisma.IntFieldUpdateOperationsInput | number
   gamesWon?: Prisma.IntFieldUpdateOperationsInput | number
   sentFriendships?: Prisma.FriendshipUncheckedUpdateManyWithoutSenderNestedInput
@@ -658,6 +692,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   email?: boolean
   password?: boolean
+  avatarPath?: boolean
   gamesPlayed?: boolean
   gamesWon?: boolean
   sentFriendships?: boolean | Prisma.User$sentFriendshipsArgs<ExtArgs>
@@ -672,6 +707,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
+  avatarPath?: boolean
   gamesPlayed?: boolean
   gamesWon?: boolean
 }, ExtArgs["result"]["user"]>
@@ -683,6 +719,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   username?: boolean
   email?: boolean
   password?: boolean
+  avatarPath?: boolean
   gamesPlayed?: boolean
   gamesWon?: boolean
 }, ExtArgs["result"]["user"]>
@@ -694,11 +731,12 @@ export type UserSelectScalar = {
   username?: boolean
   email?: boolean
   password?: boolean
+  avatarPath?: boolean
   gamesPlayed?: boolean
   gamesWon?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "username" | "email" | "password" | "gamesPlayed" | "gamesWon", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "username" | "email" | "password" | "avatarPath" | "gamesPlayed" | "gamesWon", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sentFriendships?: boolean | Prisma.User$sentFriendshipsArgs<ExtArgs>
   receivedFriendships?: boolean | Prisma.User$receivedFriendshipsArgs<ExtArgs>
@@ -720,6 +758,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     username: string
     email: string
     password: string
+    avatarPath: string | null
     gamesPlayed: number
     gamesWon: number
   }, ExtArgs["result"]["user"]>
@@ -1153,6 +1192,7 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly avatarPath: Prisma.FieldRef<"User", 'String'>
   readonly gamesPlayed: Prisma.FieldRef<"User", 'Int'>
   readonly gamesWon: Prisma.FieldRef<"User", 'Int'>
 }

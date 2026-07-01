@@ -20,6 +20,7 @@ model User {
   username    String   @unique
   email       String   @unique
   password    String
+  avatarPath  String?
   gamesPlayed Int      @default(0)
   gamesWon    Int      @default(0)
   sentFriendships     Friendship[] @relation("FriendshipSender")

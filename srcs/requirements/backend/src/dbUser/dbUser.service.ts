@@ -44,12 +44,12 @@ export class dbUserService {
 		return this.prisma.user.create({ data: { username, email, password: hash } })
 	}
 
-	async update(id: number, data: { username?: string, email?: string, password?: string }) {
+	async update(id: number, data: { username?: string, email?: string, password?: string, avatarPath?: string }) {
 		if (data.password)
 			data.password = await bcrypt.hash(data.password, 10);
 		const update = await this.prisma.user.update({ 
 			where: { id }, 
-			data 
+			data
 		})
 		if (update && this.userService.findOne(id))
 			this.userService.updateOne(new User(id, update.username, await this.getFriendsSet(id)));
