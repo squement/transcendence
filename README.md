@@ -6,6 +6,8 @@
 
 # RESOURCES
 
+- Tutorial to learn how to use React 'https://youtu.be/SqcY0GlETPk?si=lNdzyD1Bra5R7F1W'
+
 # AI USAGE
 
 # TEAM ROLES
