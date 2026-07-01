@@ -70,8 +70,8 @@ function GameMenu()
 							</div>
 						) : (
 							<div className='game-wrapper'>
-								<button className='btn-game btn-leave' onClick={() => onLeave()}>Leave</button>
-								<GamePage gameMode={gameMode} onGameOver={() => onLeave()} settings={settings} />
+								<h3>{roomId}</h3>
+								<GamePage gameMode={gameMode} settings={settings} onLeave={onLeave} />
 								<p>{roomMsg}</p>
 							</div>
 						)}

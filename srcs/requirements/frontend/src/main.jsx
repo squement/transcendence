@@ -14,9 +14,9 @@ import Router from './router.jsx'
 // import { Click, Draw } from './click_App.jsx'
 
 createRoot(document.getElementById('root')).render(
-	<StrictMode>
+	// <StrictMode>
 		<AuthProvider>
 			<Router />
 		</AuthProvider>
-	</StrictMode>,
+	// </StrictMode>,
 )

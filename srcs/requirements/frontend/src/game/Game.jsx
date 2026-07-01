@@ -5,9 +5,10 @@ import { PADDLE_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, BALL_SPEED, FRAMERATE } fro
 import { render } from "./game_render.js"
 import { useAuth } from '../AuthContext.jsx';
 import Message from '../Message.jsx';
+// import { useRoom } from '../room/useRoom.js'
 // import gameMode from '../pages/GameMenu.jsx'
 
-function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
+function Game({ gameMode, onScoreUpdate, settings, onLeave }) {
 	const canvasRef = useRef(null);
 	const leftPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
 	const rightPaddle = useRef({ y: (CANVAS_HEIGHT / 2 - PADDLE_HEIGHT / 2) });
@@ -66,6 +67,8 @@ function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
 		const canvas = canvasRef.current;
 		const ctx = canvas.getContext("2d");
 		
+		console.log('Game mounted AAAAAAAAAAA');
+
 		render(ctx, ball, leftPaddle, rightPaddle, score, gameMode, isPausedRef.current, gameStarted);
 		if (!gameStarted) return;
 		socket.emit("startGame", { mode: gameMode, settings: settings });
@@ -96,7 +99,7 @@ function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
 			
 			console.log('game is over');
 			setIsPaused(false);
-			onGameOver();
+			// onGameOver();
 			setGameStarted(false); // on revient à l'écran du bouton
 			score.current = data.score;
 			score.current.leftPlayer = 0; // on garde le score final
@@ -104,6 +107,7 @@ function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
 		});
 
 		return () => {
+			console.log('Game unmounted BBBBBBBBBBB') 
 			clearInterval(inputInterval);
 			socket.off('gameState'); // juste supprimer les listeners
 			socket.off('gameOver');  // sans déconnecter le socket
@@ -118,14 +122,52 @@ function Game({ gameMode, onGameOver, onScoreUpdate, settings }) {
 	function handleEnd() {
 		sessionStorage.removeItem('gameStarted');
 		setGameStarted(false);
-		onGameOver();
+		// onGameOver();
 		socket.emit('endGame');
 		console.log('End Game button was pressed');
 	}
 
+	function handleLeave () {
+		sessionStorage.removeItem('gameStarted');
+		setGameStarted(false);
+		onLeave();
+
+		// // sessionStorage.removeItem('gameStarted');
+		// sessionStorage.removeItem('gameMode');
+		
+		// console.log('game is over');
+		// setIsPaused(false);
+		// // onGameOver();
+		// // setGameStarted(false); // on revient à l'écran du bouton
+		// // score.current = data.score;
+		// score.current.leftPlayer = 0; // on garde le score final
+		// score.current.rightPlayer = 0;
+		// return () => {
+		// 	clearInterval(inputInterval);
+		// 	socket.off('gameState'); // juste supprimer les listeners
+		// 	socket.off('gameOver');  // sans déconnecter le socket
+		// };
+
+	}
+
+	// function handleEnd(str) {
+	// 	sessionStorage.removeItem('gameStarted');
+	// 	setGameStarted(false);
+	// 	// onGameOver();
+	// 	if (str === "end"){
+	// 		socket.emit('endGame');
+	// 	}
+	// 	else if (str === "leave") {
+	// 		socket.emit('leaveGame');
+	// 		onLeave();
+	// 	}
+	// 	console.log('End Game button was pressed');
+	// }
+
 	const handlePause = () => { socket.emit('pause'); }
 	return (
 	<>
+		<button className='btn-game btn-leave' onClick={() => handleLeave()}>Leave</button>
 		<canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} />
 		{!gameStarted ? (
 			<div>

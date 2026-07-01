@@ -88,22 +88,21 @@ export class GameGateway {
 		if (!socket.data.roomId) return ;
 		const roomId = socket.data.roomId;
 		const room = this.roomService.findOne(roomId);
-		if (room) {
+		if (room !== undefined) {
 			this.server.to(socket.data.roomId).emit('message', {
 				type: 'notification',
 				payload: {
 					title: 'test',
 					text: `${room.getPlayers.length - 1}/${room.getMaxPlayers}: ${socket.data.roomId}`,
-					roomId: roomId
 				}
 			});
 		}
 		socket.leave(roomId);
 		socket.data.roomId = null;
-		console.log(data.userId, ' left socket room ', socket.data.roomId);
+		console.log(data.userId, ' left socket room ', roomId);
 		if (!data.userId) return ;
 		this.roomService.leave(roomId, data.userId);
-		console.log(data.userId, ' left room ', socket.data.roomId);
+		console.log(data.userId, ' left room ', roomId);
 	}
 
     @SubscribeMessage('inputs')
@@ -220,7 +219,7 @@ export class GameGateway {
 				room.gameInterval = null;
 				return;
 			}
-
+			
 			this.server.to(socket.data.roomId).emit('gameState', {
 				ball: room.ball,
 				leftPaddle: room.leftPaddle,
