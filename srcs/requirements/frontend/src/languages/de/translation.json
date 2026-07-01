@@ -39,7 +39,22 @@
   },
   "profile": {
     "title": "Profil",
-    "placeholder": "Verfügbar nach der Anmeldung."
+    "stats": "Statistiken",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "games_played": "Gespielte Partien",
+    "games_won": "Gewonnene Partien",
+    "win_rate": "Gewinnrate",
+    "joined": "Mitglied seit",
+    "edit": "Profil bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "new_username": "Neuer Benutzername",
+    "new_email": "Neue E-Mail",
+    "new_password": "Neues Passwort",
+    "upload_avatar": "Avatar ändern",
+    "update_success": "Profil aktualisiert!",
+    "update_error": "Aktualisierung fehlgeschlagen."
   },
   "friends": {
     "title": "Freunde",

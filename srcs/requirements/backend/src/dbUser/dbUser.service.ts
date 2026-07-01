@@ -34,8 +34,8 @@ export class dbUserService {
 		const user = await this.findById(myId);
 		if (!user)
 			return null;
-		const { id, updatedAt, email, password, ...rest } = user;
-		return rest;
+		const { id, updatedAt, password, ...rest } = user;
+		return rest; // includes email + avatarPath for the profile page
 	}
 
 	// create or modify user
@@ -44,7 +44,7 @@ export class dbUserService {
 		return this.prisma.user.create({ data: { username, email, password: hash } })
 	}
 
-	async update(id: number, data: { username?: string, email?: string, password?: string }) {
+	async update(id: number, data: { username?: string, email?: string, password?: string, avatarPath?: string }) {
 		if (data.password)
 			data.password = await bcrypt.hash(data.password, 10);
 		const update = await this.prisma.user.update({ 

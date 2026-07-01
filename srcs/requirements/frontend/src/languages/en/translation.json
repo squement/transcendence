@@ -39,7 +39,22 @@
   },
   "profile": {
     "title": "Profile",
-    "placeholder": "Available after login is implemented."
+    "stats": "Statistics",
+    "username": "Username",
+    "email": "Email",
+    "games_played": "Games played",
+    "games_won": "Games won",
+    "win_rate": "Win rate",
+    "joined": "Member since",
+    "edit": "Edit profile",
+    "save": "Save",
+    "cancel": "Cancel",
+    "new_username": "New username",
+    "new_email": "New email",
+    "new_password": "New password",
+    "upload_avatar": "Change avatar",
+    "update_success": "Profile updated!",
+    "update_error": "Update failed."
   },
   "friends": {
     "title": "Friends",
