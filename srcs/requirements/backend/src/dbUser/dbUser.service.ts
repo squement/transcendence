@@ -34,8 +34,8 @@ export class dbUserService {
 		const user = await this.findById(myId);
 		if (!user)
 			return null;
-		const { id, updatedAt, email, password, ...rest } = user;
-		return rest;
+		const { id, updatedAt, password, ...rest } = user;
+		return rest; // includes email + avatarPath for the profile page
 	}
 
 	// create or modify user

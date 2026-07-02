@@ -46,10 +46,10 @@ function GameMenu()
 						<div>
 							<button className='btn-game' onClick={() => setGameMode(null)}>Game Mode</button>
 							<button className='btn-game' onClick={() => onCreate()}>Create</button>
-							{rooms && rooms.map(room => (
-								<div>
+							{rooms && rooms.map((room, i) => (
+								<div key={room.id}>
 								<button className='btn-game' onClick={() => onJoin(room.id)}>
-									{room.id} - {room.players[0]}: ?/?
+									Room #{i + 1} — {room.players.length}/2 players
 								</button>
 								</div>
 							))}
@@ -58,7 +58,7 @@ function GameMenu()
 					) : (
 						<div className='game-wrapper'>
 							<button className='btn-game btn-leave' onClick={() => onLeave()}>Leave</button>
-							<GamePage gameMode={gameMode} onGameOver={() => onLeave()} />
+							<GamePage gameMode={gameMode} onGameOver={() => onLeave()} roomId={roomId} />
 							<p>{roomMsg}</p>
 						</div>
 					)}

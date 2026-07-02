@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import '../styles/pages.css'
 
-// 404 catching all unknown routes
 function NotFound()
 {
+	const { t } = useTranslation();
+
 	return (
 		<div className="page">
-			<h1>404</h1>
-			<p>Page not found.</p>
-			<Link to="/">← Back to home</Link>
+			<h1>{t('errors.not_found_title')}</h1>
+			<p>{t('errors.not_found_message')}</p>
+			<Link to="/">{t('errors.back_home')}</Link>
 		</div>
 	);
 }

@@ -8,6 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
+  // serves dir uploads/  static -> access in /uploads/<filename>
   app.use('/uploads', serveStatic(join(process.cwd(), 'uploads')));
 
   app.enableCors({

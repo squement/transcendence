@@ -1,13 +1,16 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Req, UseInterceptors, UploadedFile } from "@nestjs/common";
+import { Controller, Get, Post, Patch, Body, Param, UseGuards, Req, UseInterceptors, UploadedFile } from "@nestjs/common";
+// multer : librairie Node.js qui gère l'upload de fichiers en multipart/form-data.
+// diskStorage : variante de multer qui sauvegarde le fichier sur le disque (vs memoryStorage qui garde en RAM).
+// FileInterceptor intègre multer dans NestJS et expose le fichier via @UploadedFile().
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { extname } from "path";
-import { dbUserService } from "./dbUser.service";
-import { AuthGuard } from "src/auth/auth.guard";
 import { unlink } from "fs/promises";
 import { join } from "path";
-import { User } from "src/user/user.model";
-import { error } from "console";
+import { dbUserService } from "./dbUser.service";
+import { AuthGuard } from "src/auth/auth.guard";
+// import { User } from "src/user/user.model";
+// import { error } from "console";
 
 @Controller('dbUser')
 export class dbUserController {
@@ -91,5 +94,13 @@ export class dbUserController {
 		const deleted = await this.dbUserService.findByUsername(username);
 		if (!deleted) return null;
 		return this.dbUserService.deleteFriendship(Number(req['user'].id), deleted.id);
+	}
+
+	// Patch : comme POST mais utilise pour MAJ partielles d'une ressource
+	@Patch('myUser')
+	@UseGuards(AuthGuard)
+	async updateMyUser(@Req() req: Request, @Body() body: { username?: string, email?: string, password?: string }) {
+		await this.dbUserService.update(Number(req['user'].id), body);
+		return { success: true };
 	}
 }

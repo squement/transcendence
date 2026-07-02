@@ -15,14 +15,14 @@ function Game({ gameMode, onGameOver, onScoreUpdate }) {
 	const keysBE = useRef({ w: false, s: false, up: false, down: false });
 	const score = useRef({ leftPlayer: 0, rightPlayer: 0 });
 	const { user } = useAuth();
-	// const [gameStarted, setGameStarted] = useState(false);
-	// const socket = useRef(null);
-	//const [gameStarted, setGameStarted] = useState(false);
 	const [gameStarted, setGameStarted] = useState(sessionStorage.getItem('gameStarted') === 'true');
 	const [isPaused, setIsPaused] = useState(false);
 	const isPausedRef = useRef(false);
 
-	console.log('did game started ?? ', gameStarted);
+	// clear sessionStorage on unmount to avoid stale gameStarted state
+	useEffect(() => {
+		return () => { sessionStorage.removeItem('gameStarted'); };
+	}, []);
 
 	// écoute du clavier
 	useEffect(() => {

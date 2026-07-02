@@ -21,7 +21,8 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection, OnGate
 		if (!match) return null;
 		try {
 			const payload = this.jwtService.verify<{ id: string }>(match[1]);
-			return Number(payload.id);
+			const id = Number(payload.id);
+			return isNaN(id) ? null : id;
 		}
 		catch {
 			return null;

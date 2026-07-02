@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import '../styles/pages.css'
 import { LogoutButton } from '../LoginPage'
 import LoginPage from '../LoginPage'
@@ -7,6 +8,7 @@ import LoginPage from '../LoginPage'
 // Login page — email + password form
 function Login()
 {
+	const { t } = useTranslation();
 	const [identifier, setIdentifier] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -29,9 +31,9 @@ function Login()
 
 	return (
 		<div className="page">
-			<h1>Login</h1>
+			<h1>{t('login.title')}</h1>
 			<form onSubmit={handleSubmit}>
-				<label>Email or Username</label>
+				<label>{t('login.identifier_label')}</label>
 				<br />
 				<input
 					type="text"
@@ -40,7 +42,7 @@ function Login()
 					required
 				/>
 				<br /><br />
-				<label>Password</label>
+				<label>{t('login.password_label')}</label>
 				<br />
 				<input
 					type="password"
@@ -49,10 +51,10 @@ function Login()
 					required
 				/>
 				<br /><br />
-				<button type="submit" className="btn">Login</button>
+				<button type="submit" className="btn">{t('login.submit')}</button>
 			</form>
-			<p>No account? <Link to="/register">Register</Link></p>
-			<Link to="/">← Back</Link>
+			<p>{t('login.no_account')} <Link to="/register">{t('login.register_link')}</Link></p>
+			<Link to="/">{t('common.back')}</Link>
 			<LoginPage />
 			<LogoutButton />
 		</div>

@@ -1,0 +1,100 @@
+{
+  "common": {
+    "back": "← Zurück",
+    "back_home": "← Zurück zur Startseite",
+    "loading": "Wird geladen...",
+    "coming_soon": "Demnächst verfügbar."
+  },
+  "home": {
+    "title": "Transcendence",
+    "play": "Spielen",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "profile": "Profil",
+    "tournament": "Turnier",
+    "friends": "Freunde",
+    "settings": "Einstellungen",
+    "dev_tools": "Entwickler-Tools"
+  },
+  "login": {
+    "title": "Anmelden",
+    "identifier_label": "E-Mail oder Benutzername",
+    "password_label": "Passwort",
+    "submit": "Anmelden",
+    "no_account": "Kein Konto?",
+    "register_link": "Registrieren",
+    "welcome": "Willkommen bei Pong!",
+    "username_placeholder": "Dein Benutzername",
+    "logout": "Abmelden",
+    "login_failed": "Anmeldung fehlgeschlagen, bitte erneut versuchen!"
+  },
+  "register": {
+    "title": "Konto erstellen",
+    "username_label": "Benutzername",
+    "email_label": "E-Mail",
+    "password_label": "Passwort",
+    "submit": "Registrieren",
+    "already_account": "Bereits ein Konto?",
+    "login_link": "Anmelden"
+  },
+  "profile": {
+    "title": "Profil",
+    "stats": "Statistiken",
+    "username": "Benutzername",
+    "email": "E-Mail",
+    "games_played": "Gespielte Partien",
+    "games_won": "Gewonnene Partien",
+    "win_rate": "Gewinnrate",
+    "joined": "Mitglied seit",
+    "edit": "Profil bearbeiten",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "new_username": "Neuer Benutzername",
+    "new_email": "Neue E-Mail",
+    "new_password": "Neues Passwort",
+    "upload_avatar": "Avatar ändern",
+    "update_success": "Profil aktualisiert!",
+    "update_error": "Aktualisierung fehlgeschlagen."
+  },
+  "friends": {
+    "title": "Freunde",
+    "placeholder": "Freundesliste — demnächst verfügbar."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "placeholder": "Kontoeinstellungen, demnächst verfügbar."
+  },
+  "tournament": {
+    "title": "Turnier",
+    "placeholder": "Turnier, demnächst verfügbar."
+  },
+  "errors": {
+    "not_found_title": "404",
+    "not_found_message": "Seite nicht gefunden.",
+    "back_home": "← Zurück zur Startseite"
+  },
+  "game": {
+    "mode_pppb": "PPPB-Modus",
+    "mode_training": "Trainingsmodus",
+    "mode_local": "Lokaler Modus",
+    "mode_online": "Online-Modus",
+    "room_game_mode": "Spielmodus",
+    "room_create": "Erstellen",
+    "room_refresh": "Aktualisieren",
+    "room_leave": "Verlassen",
+    "room_label": "Raum #{{index}} — {{count}}/2 Spieler",
+    "start": "Spiel starten!",
+    "pause": "Pause",
+    "resume": "Fortsetzen",
+    "end_game": "Spiel beenden",
+    "leave": "Verlassen"
+  },
+  "chat": {
+    "placeholder": "Nachricht...",
+    "send": "Senden"
+  },
+  "notifications": {
+    "room_joined": "Sie haben den Raum betreten.",
+    "room_left": "Sie haben den Raum verlassen."
+  }
+}
