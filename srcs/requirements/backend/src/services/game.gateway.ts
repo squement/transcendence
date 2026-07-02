@@ -156,7 +156,7 @@ export class GameGateway {
 	}
 
 	@SubscribeMessage('chatMessage')
-	handleChatMessage(
+	async handleChatMessage(
 		@ConnectedSocket() socket: any,
 		@MessageBody() data: { userId: string; message: string }) {
 		if (!socket.data.roomId) return ;
@@ -165,8 +165,10 @@ export class GameGateway {
 		const now = Date.now();
 		if (socket.data.lastChat && now - socket.data.lastChat < 500) return ;
 		socket.data.lastChat = now;
+		// resolve username server-side 
+		const user = await this.dbUser.findById(Number(data.userId));
 		this.server.to(socket.data.roomId).emit('chatMessage', {
-			userId: data.userId,
+			username: user?.username ?? 'Unknown',
 			message,
 			timestamp: now,
 			roomId: socket.data.roomId,

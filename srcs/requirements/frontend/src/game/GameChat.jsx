@@ -37,7 +37,7 @@ function GameChat({ roomId }) {
 		<div className="game-chat">
 			<div className="chat-messages">
 				{messages.map((msg, i) => (
-					<p key={`${msg.timestamp}-${i}`}><strong>{msg.userId}</strong>: {msg.message}</p>
+					<p key={`${msg.timestamp}-${i}`}><strong>{msg.username}</strong>: {msg.message}</p>
 				))}
 				<div ref={bottomRef} />
 			</div>
